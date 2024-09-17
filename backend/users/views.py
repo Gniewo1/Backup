@@ -1,11 +1,15 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from .serializers import RegisterSerializer
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import login
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
@@ -43,3 +47,9 @@ class UserCheckView(APIView):
             'first_name': user.first_name,
             'last_name': user.last_name
         })
+    
+
+# @login_required
+def current_user(request):
+    user = request.user
+    return JsonResponse({'username': user.username})
