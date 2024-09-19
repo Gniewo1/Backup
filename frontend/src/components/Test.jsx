@@ -1,28 +1,41 @@
-import { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-export const UserContext = createContext();
-
-export const UserProvider = ({ children }) => {
-  const [username, setUsername] = useState('');
+const ItemList = () => {
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/api/current_user/', { withCredentials: true });
-        setUsername(response.data.username);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+    const token = localStorage.getItem('token');  // Get token from localStorage
 
-    fetchUser();
+    fetch('http://localhost:8000/api/items/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Token ${token}`,  // Include the token in the header
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
+        if (response.status === 401) {
+          throw new Error('Unauthorized');
+        }
+        return response.json();
+      })
+      .then(data => setItems(data))
+      .catch(error => console.error('Error fetching items:', error));
   }, []);
 
   return (
-    // <UserContext.Provider value={username}>
-    //   {children}
-    // </UserContext.Provider>
-    <div>username</div>
+    <div>
+      <h1>Items List</h1>
+      <ul>
+        {items.map(item => (
+          <li key={item.id}>
+            <h2>{item.first_name}</h2>
+            <p>{item.last_name}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
+
+export default ItemList;

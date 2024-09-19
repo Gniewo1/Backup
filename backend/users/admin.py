@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser, TestClass
 
 
 # class CustomUserAdmin(UserAdmin):
@@ -11,3 +11,4 @@ from .models import CustomUser
 #     list_display = ['username', 'email', 'verified', 'is_staff']
 
 admin.site.register(CustomUser)
+admin.site.register(TestClass)

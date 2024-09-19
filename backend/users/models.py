@@ -3,3 +3,8 @@ from django.db import models
 
 class CustomUser(AbstractUser):
     verified = models.BooleanField(default=False)
+
+
+class TestClass(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)

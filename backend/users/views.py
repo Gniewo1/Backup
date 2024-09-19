@@ -2,14 +2,15 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
-from .serializers import RegisterSerializer
+from rest_framework.decorators import api_view, permission_classes
+from .serializers import RegisterSerializer, TestSerializer
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from .models import TestClass
+
 
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
@@ -49,7 +50,26 @@ class UserCheckView(APIView):
         })
     
 
-# @login_required
-def current_user(request):
-    user = request.user
-    return JsonResponse({'username': user.username})
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def current_user(request):
+#     user = request.user
+#     return Response({'username': user.username})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_info(request):
+    user = request.user  # Get the currently logged-in user
+    data = {
+        'id': user.id,
+        'username': user.username,
+        'email': user.email,
+    }
+    return Response(data)
+
+
+@api_view(['GET'])
+def get_items(request):
+    items = TestClass.objects.all()  # Fetch all items from the database
+    serializer = TestSerializer(items, many=True)
+    return Response(serializer.data)

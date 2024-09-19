@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from .models import TestClass
 
 User = get_user_model()
 
@@ -16,3 +17,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+
+class TestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestClass
+        fields = ['first_name', 'last_name']
