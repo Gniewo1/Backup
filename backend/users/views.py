@@ -64,6 +64,8 @@ def get_user_info(request):
         'id': user.id,
         'username': user.username,
         'email': user.email,
+        'is_admin':user.is_staff or user.is_superuser,
+        'is_verified': user.verified,
     }
     return Response(data)
 

@@ -4,6 +4,8 @@ import { LogOut } from '../functions/LogOut';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');  // Get token from localStorage
@@ -21,7 +23,11 @@ const Profile = () => {
         }
         return response.json();
       })
-      .then(data => setUser(data))
+      .then(data => {
+        setUser(data);
+        setIsAdmin(data.is_admin);
+        setIsVerified(data.is_verified)
+      })
       .catch(error => console.error('Error fetching user info:', error));
   }, []);
 
@@ -34,6 +40,8 @@ const Profile = () => {
           <h1>Witaj</h1>
           <p>Email: {user.email}</p>
           <p>Username: {user.username}</p>
+          {isAdmin ? <p>You are an Admin.</p> : <p>You are a regular user.</p>}
+          {(isAdmin || isVerified) ? <p>You are a Verified user.</p> : <p>You are not a Verified user.</p>}
         </div>
       ) : (
         <p>Loading user information...</p>
