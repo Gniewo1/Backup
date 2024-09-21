@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import TestClass
+from .models import TestClass, VerificationRequest
 
 User = get_user_model()
 
@@ -22,3 +22,11 @@ class TestSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestClass
         fields = ['first_name', 'last_name']
+
+class VerificationRequestSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = VerificationRequest
+        fields = ['id', 'user', 'request_date', 'status']
+        # read_only_fields = ['id', 'username', 'request_date', 'status', 'updated_at']
