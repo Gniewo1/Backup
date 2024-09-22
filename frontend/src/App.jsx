@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Login from './components/Login'
 import Register from './components/Register'
 import Home from './components/Home'
 import Navbar from './components/Navbar'
 import Profile from './components/Profile'
-import ItemList from './components/Test'
 import {Routes, Route, useLocation, Navigate} from 'react-router-dom'
 import axios from 'axios'
 

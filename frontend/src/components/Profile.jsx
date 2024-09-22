@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import axios from 'axios';
+import '../styles/buttons.css';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -12,7 +13,7 @@ const Profile = () => {
   const [requests, setRequests] = useState([]);
   const [error, setError] = useState(null);
 
-  // Fetch user info
+  ///////////////////////////////////////////////////////////////////////////// Fetch current user info
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -44,7 +45,7 @@ const Profile = () => {
     fetchUserInfo();
   }, []);
 
-  // Fetch pending verification requests
+  //////////////////////////////////////////////////////////////////////////////////// Fetch pending verification requests
   useEffect(() => {
     const fetchPendingRequests = async () => {
       if (isAdmin) { // Fetch only if the user is admin
@@ -69,6 +70,8 @@ const Profile = () => {
     fetchPendingRequests();
   }, [isAdmin]);
 
+
+  /////////////////////////////////////////////////////////////////////// Send Verification request
   const sendVerificationRequest = async () => {
     setLoadingUser(true);
     try {
@@ -93,6 +96,7 @@ const Profile = () => {
     }
   };
 
+  /////////////////////////////////////////////////////////////////// Real
   return (
     <>
       <Navbar />
@@ -101,12 +105,12 @@ const Profile = () => {
           <p>Loading user information...</p>
         ) : (
           <div>
-            <h1>Welcome</h1>
-            <p>Email: {user.email}</p>
-            <p>Username: {user.username}</p>
+            <h1>Welcome {user.username}</h1>
+            {/* <p>Email: {user.email}</p>
+            <p>Username: {user.username}</p> */}
             {isAdmin ? (
               <>
-                <p>You are an Admin.</p>
+                {/* <p>You are an Admin.</p> */}
                 <div>
                   <h1>Pending Verification Requests</h1>
                   {loadingRequests ? (
@@ -122,6 +126,8 @@ const Profile = () => {
                               <p>Username: {request.user}</p>
                               <p>Status: {request.status}</p>
                               <p>Requested on: {new Date(request.request_date).toLocaleString()}</p>
+                              <button class="button accept-button">Accept</button>
+                              <button class="button refuse-button">Refuse</button>
                             </li>
                           ))}
                         </ul>
