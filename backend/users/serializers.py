@@ -25,14 +25,17 @@ class TestSerializer(serializers.ModelSerializer):
 
 class VerificationRequestSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
+    user_id = serializers.IntegerField(source='user.id', read_only=True) 
+
+    status = serializers.ChoiceField(choices=VerificationRequest.STATUS_CHOICES)
 
     class Meta:
         model = VerificationRequest
-        fields = ['id', 'user', 'request_date', 'status']
-        # read_only_fields = ['id', 'username', 'request_date', 'status', 'updated_at']
+        fields = ['id', 'user', 'user_id', 'request_date', 'status']
+   
 
-
-class VerifyingUserSeriaziler(serializers.ModelSerializer):
+class VerifyingUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser  # Use your custom user model
         fields = ['verified']
+

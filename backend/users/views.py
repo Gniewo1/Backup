@@ -1,13 +1,13 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import RegisterSerializer, TestSerializer, VerificationRequestSerializer, VerifyingUserSeriaziler
+from .serializers import RegisterSerializer, TestSerializer, VerificationRequestSerializer, VerifyingUserSerializer
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import login
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 # from django.contrib.auth.decorators import login_required
 from .models import TestClass, VerificationRequest, CustomUser
 from django.shortcuts import get_object_or_404
@@ -93,7 +93,6 @@ class ShowVerificationRequests(APIView):
     def get(self, request, *args, **kwargs):
         pending_requests = VerificationRequest.objects.filter(status='pending')
         serializer = VerificationRequestSerializer(pending_requests, many=True)
-        print(serializer.data)  # This will help you see the serialized output
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
@@ -103,10 +102,24 @@ def VerifyingUser(request):
     # Extract the user ID from the request data
     user_id = request.data.get('id')
     user = get_object_or_404(CustomUser, id=user_id)
-    serializer = VerifyingUserSeriaziler(user, data=request.data, partial=True)
+    serializer = VerifyingUserSerializer(user, data=request.data, partial=True)
     
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VerificationRequestUpdate(viewsets.ModelViewSet):
+    queryset = VerificationRequest.objects.all()
+    serializer_class = VerificationRequestSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)  # Allow partial updates
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

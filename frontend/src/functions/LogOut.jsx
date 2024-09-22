@@ -14,8 +14,6 @@ import axios from 'axios';
       return true;
 
 
-
-
     } catch (error) {
       console.error('Logout failed:', error);
       return false;

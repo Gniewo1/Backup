@@ -1,6 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 from knox import views as knox_views
-from .views import RegisterAPI, UserCheckView, LoginAPI, get_items, get_user_info, VerificationRequestView, ShowVerificationRequests, VerifyingUser
+from rest_framework.routers import DefaultRouter
+from .views import RegisterAPI, UserCheckView, LoginAPI, get_items, get_user_info, VerificationRequestView, ShowVerificationRequests, VerifyingUser, VerificationRequestUpdate
+
+router = DefaultRouter()
+router.register(r'verification-requests', VerificationRequestUpdate, basename='verification-request')
 
 urlpatterns = [
     path('register/', RegisterAPI.as_view(), name='register'),
@@ -13,4 +17,5 @@ urlpatterns = [
     path('verification-request/', VerificationRequestView.as_view(), name='verification-request'),
     path('show-verification-requests/', ShowVerificationRequests.as_view(), name='show-verification-requests'),
     path('verifying-user/', VerifyingUser, name='verifying-user'),
+    path('', include(router.urls)),
 ]
