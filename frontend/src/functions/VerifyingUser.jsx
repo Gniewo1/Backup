@@ -1,4 +1,5 @@
-  export const Verify = async (userId) => {
+import axios from 'axios';
+ export const Verify = async (userId) => {
     const token = localStorage.getItem('token');  // Assuming you're using token authentication
 
     const response = await fetch('http://localhost:8000/api/verifying-user/', {
@@ -17,3 +18,29 @@
       console.error('Error verifying user:', data);
     }
   };
+
+
+ 
+export const UpdateVerificationRequest = async (requestId, newStatus) => {
+  const token = localStorage.getItem('token'); // Fetch token from local storage
+  try {
+      const response = await axios.patch(`http://localhost:8000/api/verification-requests/${requestId}/`, {
+          status: newStatus,
+      }, {
+          headers: {
+              Authorization: `Token ${token}`, // Use the token fetched above
+          },
+      });
+
+      console.log('Status updated:', response.data);
+      return response.data; // Return the response data if needed
+  } catch (error) {
+      if (error.response) {
+          console.error('Error updating status:', error.response.data);
+      } else {
+          console.error('Error updating status:', error.message);
+      }
+      throw error; // Optionally rethrow the error for further handling
+  }
+};
+  

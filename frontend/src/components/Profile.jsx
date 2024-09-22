@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import axios from 'axios';
 import '../styles/buttons.css';
-import { Verify } from '../functions/VerifyingUser';
+import { Verify, UpdateVerificationRequest } from '../functions/VerifyingUser';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -15,21 +15,21 @@ const Profile = () => {
   const [error, setError] = useState(null);
 
 
-  const updateVerificationRequestStatus = async (requestId, newStatus) => {
-    try {
-      const response = await axios.patch(`http://localhost:8000/api/verification-requests/${requestId}/`, {
-        status: newStatus,
-      }, {
-        headers: {
-          Authorization: `Token ${token}`, // if using token authentication
-        },
-      });
+  // const updateVerificationRequestStatus = async (requestId, newStatus) => {
+  //   try {
+  //     const response = await axios.patch(`http://localhost:8000/api/verification-requests/${requestId}/`, {
+  //       status: newStatus,
+  //     }, {
+  //       headers: {
+  //         Authorization: `Token ${token}`, // if using token authentication
+  //       },
+  //     });
   
-      console.log('Status updated:', response.data);
-    } catch (error) {
-      console.error('Error updating status:', error.response.data);
-    }
-  };
+  //     console.log('Status updated:', response.data);
+  //   } catch (error) {
+  //     console.error('Error updating status:', error.response.data);
+  //   }
+  // };
   
 
   ///////////////////////////////////////////////////////////////////////////// Fetch current user info
@@ -144,9 +144,13 @@ const Profile = () => {
                             <li key={request.id}>
                               <p>Username: {request.user}</p>
                               <p>User.ID: {request.user_id}</p>
+                              <p>Request.ID: {request.id}</p>
                               <p>Status: {request.status}</p>
                               <p>Requested on: {new Date(request.request_date).toLocaleString()}</p>
-                              <button onClick={() => Verify(request.user_id)}  className="button accept-button">Accept</button>
+                              <button onClick={() => {Verify(request.user_id);
+                                 UpdateVerificationRequest(request.id, 'approved');
+                                 window.location.reload();
+                              }} className="button accept-button">Accept</button>
                               <button className="button refuse-button">Refuse</button>
                             </li>
                           ))}
