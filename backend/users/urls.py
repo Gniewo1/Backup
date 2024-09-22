@@ -1,6 +1,6 @@
 from django.urls import path
 from knox import views as knox_views
-from .views import RegisterAPI, UserCheckView, LoginAPI, get_items, get_user_info, VerificationRequestView, ShowVerificationRequests
+from .views import RegisterAPI, UserCheckView, LoginAPI, get_items, get_user_info, VerificationRequestView, ShowVerificationRequests, VerifyingUser
 
 urlpatterns = [
     path('register/', RegisterAPI.as_view(), name='register'),
@@ -12,4 +12,5 @@ urlpatterns = [
     path('user-info/', get_user_info, name='get_user_info'),
     path('verification-request/', VerificationRequestView.as_view(), name='verification-request'),
     path('show-verification-requests/', ShowVerificationRequests.as_view(), name='show-verification-requests'),
+    path('verifying-user/', VerifyingUser, name='verifying-user'),
 ]

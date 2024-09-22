@@ -3,13 +3,14 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import RegisterSerializer, TestSerializer, VerificationRequestSerializer
+from .serializers import RegisterSerializer, TestSerializer, VerificationRequestSerializer, VerifyingUserSeriaziler
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import login
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from .models import TestClass, VerificationRequest
+# from django.contrib.auth.decorators import login_required
+from .models import TestClass, VerificationRequest, CustomUser
+from django.shortcuts import get_object_or_404
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -94,3 +95,18 @@ class ShowVerificationRequests(APIView):
         serializer = VerificationRequestSerializer(pending_requests, many=True)
         print(serializer.data)  # This will help you see the serialized output
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def VerifyingUser(request):
+    # Extract the user ID from the request data
+    user_id = request.data.get('id')
+    user = get_object_or_404(CustomUser, id=user_id)
+    serializer = VerifyingUserSeriaziler(user, data=request.data, partial=True)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
