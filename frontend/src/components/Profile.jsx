@@ -151,7 +151,11 @@ const Profile = () => {
                                  UpdateVerificationRequest(request.id, 'approved');
                                  window.location.reload();
                               }} className="button accept-button">Accept</button>
-                              <button className="button refuse-button">Refuse</button>
+                              <button onClick={() => {
+                                 UpdateVerificationRequest(request.id, 'rejected');
+                                 window.location.reload();
+                              }}
+                              className="button refuse-button">Refuse</button>
                             </li>
                           ))}
                         </ul>
