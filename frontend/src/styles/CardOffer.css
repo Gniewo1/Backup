@@ -1,0 +1,63 @@
+.sell-offer-form-container {
+  padding-top: 80px; /* Add padding based on your navbar height */
+  max-width: 600px;
+  margin: 0 auto; /* Center the form */
+  padding: 20px; /* Additional padding */
+  border: 1px solid #ccc; /* Form styling */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #f9f9f9; /* Background color */
+}
+
+.empty-container {
+  padding-top: 25px;
+  height: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px; /* Space between form groups */
+}
+
+label {
+  display: block; /* Make label a block element */
+  margin-bottom: 8px; /* Space between label and input */
+  font-weight: bold; /* Optional: Make the label bold */
+}
+
+.form-select,
+.form-input {
+  width: 100%; /* Full width for input and select */
+  padding: 10px; /* Padding inside the input and select */
+  border: 1px solid #ccc; /* Border styling */
+  border-radius: 4px; /* Round corners for input and select */
+  box-sizing: border-box;
+}
+
+.btn-submit {
+  background-color: blue; /* Button background color */
+  color: white; /* Button text color */
+  padding: 10px 15px; /* Padding inside the button */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Round corners for button */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.selected-card-image {
+  margin-top: 15px;
+  text-align: center; /* Center the image */
+}
+
+.selected-card-image img {
+  max-width: 400px; /* Responsive width */
+  height: auto; /* Maintain aspect ratio */
+  border: 1px solid #ccc; /* Optional: Add a border */
+  border-radius: 8px; /* Optional: Round corners */
+}
+
+.error-message, .success-message {
+  margin-top: 10px; /* Space above messages */
+  color: red; /* Error message color */
+}
+
+.success-message {
+  color: green; /* Success message color */
+}

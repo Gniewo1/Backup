@@ -6,9 +6,10 @@
     align-items: center;
 
     width: 100%;
-    position: fixed; /* Opcjonalne - aby navbar był przypięty u góry */
+    position: fixed; /*Opcjonalne - aby navbar był przypięty u góry */
     top: 0;
     left: 0;
+
   }
   
   .navbar-logo a {
