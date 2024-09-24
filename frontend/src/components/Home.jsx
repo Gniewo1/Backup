@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import Navbar from './Navbar'
-import { LogOut } from '../functions/LogOut';
+import Navbar from './Navbar';
+import CardList from './CardList';
 
 const Home = () => {
    
@@ -44,6 +44,7 @@ const Home = () => {
       <>
       <Navbar />
       {isAuthenticated ? <div>Login</div> : <div>Logout</div>}
+      <CardList />
     </>
 
      
