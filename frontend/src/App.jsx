@@ -5,7 +5,7 @@ import Register from './components/Register'
 import Home from './components/Home'
 import Navbar from './components/Navbar'
 import Profile from './components/Profile'
-// import VerifyingUser from './functions/VerifyingUser'
+import SellCard from './components/SellCard'
 import {Routes, Route, useLocation, Navigate} from 'react-router-dom'
 import axios from 'axios'
 
@@ -56,6 +56,8 @@ function App() {
      <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
      {/* <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/"/>} /> */}
      <Route path="/profile" element={<Profile />} />
+     <Route path="/sell-card" element={<SellCard />} />
+
      {/* <Route path="/test" element={<VerifyingUser />} /> */}
     </Routes>
     </>
