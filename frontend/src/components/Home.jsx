@@ -44,7 +44,7 @@ const Home = () => {
       <>
       <Navbar />
       {isAuthenticated ? <div>Login</div> : <div>Logout</div>}
-      <CardList />
+      {/* <CardList /> */}
     </>
 
      

@@ -12,6 +12,7 @@ const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const currentPath = window.location.pathname; 
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleLogout = async () => {
     const success = await LogOut();
@@ -33,6 +34,12 @@ const Navbar = () => {
     }
   };
 
+  const handleSearch = (event) => {
+    event.preventDefault(); // Prevent form submission
+    // Navigate to the search results page with the search query
+    navigate(`/search?query=${searchQuery}`);
+  };
+
   useEffect(() => {
     const verifyAuthentication = async () => {
       const authenticated = await CheckAuthentication();
@@ -52,6 +59,16 @@ const Navbar = () => {
       <div className="navbar-logo">
         <Link to="/">MyApp</Link>
       </div>
+
+      <form className="navbar-search" onSubmit={handleSearch}>
+        <input 
+          type="text" 
+          placeholder="Search..." 
+          value={searchQuery} 
+          onChange={(e) => setSearchQuery(e.target.value)} 
+        />
+        <button type="submit">Search</button>
+      </form>
       
       <ul className="navbar-links">
         <li>

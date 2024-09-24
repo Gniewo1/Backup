@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import axios from 'axios';
 import '../styles/buttons.css';
 import { Verify, UpdateVerificationRequest } from '../functions/VerifyingUser';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -13,23 +14,16 @@ const Profile = () => {
   const [loadingRequests, setLoadingRequests] = useState(true);
   const [requests, setRequests] = useState([]);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
 
-  // const updateVerificationRequestStatus = async (requestId, newStatus) => {
-  //   try {
-  //     const response = await axios.patch(`http://localhost:8000/api/verification-requests/${requestId}/`, {
-  //       status: newStatus,
-  //     }, {
-  //       headers: {
-  //         Authorization: `Token ${token}`, // if using token authentication
-  //       },
-  //     });
-  
-  //     console.log('Status updated:', response.data);
-  //   } catch (error) {
-  //     console.error('Error updating status:', error.response.data);
-  //   }
-  // };
+
+
+  ///////////////////////////////////////////////////////////// handle sell button
+  const handleClick = () => {
+    // Redirect to the desired page, e.g., '/sell-card'
+    navigate('/sell-card');
+  };
   
 
   ///////////////////////////////////////////////////////////////////////////// Fetch current user info
@@ -168,7 +162,10 @@ const Profile = () => {
               <p>You are a regular user.</p>
             )}
             {(isAdmin || isVerified) ? (
+              <>
               <p>You are a Verified user.</p>
+              <button onClick={handleClick}  style={{ backgroundColor: 'blue', color: 'white' }}>Sell Card</button>
+              </>
             ) : (
               <>
                 <p>You are not a Verified user.</p>

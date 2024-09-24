@@ -61,3 +61,25 @@
       flex-direction: column;
     }
   }
+
+  .navbar-search {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-search input {
+    padding: 10px; /* Increase padding for more height */
+    margin-right: 10px;
+    width: 400px; /* Set a wider width */
+    height: 20px; /* Set a specific height */
+    border-radius: 5px; /* Optional: rounded corners */
+    border: 1px solid #ccc; /* Optional: border styling */
+    font-size: 16px; /* Adjust font size here */
+  }
+  
+  .navbar-search button {
+    padding: 10px 15px; /* Adjust button padding for consistency */
+    height: 40px; /* Match the button height with input */
+    border-radius: 5px; /* Optional: rounded corners */
+    font-size: 16px; /* Match font size with input for consistency */
+  }
