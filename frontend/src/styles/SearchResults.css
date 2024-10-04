@@ -1,0 +1,51 @@
+/* SearchResults.css */
+
+.search-results {
+    padding: 20px;
+    max-width: 70%; /* Set max width of the container */
+    margin: 0 auto; /* Center the container */
+}
+
+.offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust min size for responsiveness */
+    gap: 20px;
+}
+
+.offer-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.offer-card:hover {
+    transform: scale(1.05);
+}
+
+.offer-image {
+    width: 100%; /* Full width of the card */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 120px; /* Set a max height to control the image size */
+    object-fit: contain; /* Ensure the image is not cut off */
+}
+
+.offer-details {
+    padding: 10px;
+    text-align: center;
+}
+
+.offer-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.offer-button:hover {
+    background-color: #0056b3;
+}

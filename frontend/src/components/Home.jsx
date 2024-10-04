@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Navbar from './Navbar';
-import CardList from './CardList';
+
 
 const Home = () => {
    

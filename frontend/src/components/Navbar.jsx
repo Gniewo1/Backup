@@ -55,11 +55,12 @@ const Navbar = () => {
 
 
   return (
+    <>
     <nav className="navbar">
       <div className="navbar-logo">
         <Link to="/">MyApp</Link>
       </div>
-
+      {(currentPath === '/' || currentPath === '/search') && (
       <form className="navbar-search" onSubmit={handleSearch}>
         <input 
           type="text" 
@@ -69,6 +70,8 @@ const Navbar = () => {
         />
         <button type="submit">Search</button>
       </form>
+      )}
+
       
       <ul className="navbar-links">
         <li>
@@ -102,6 +105,7 @@ const Navbar = () => {
         )}
       </ul>
     </nav>
+    </>
   );
 };
 
