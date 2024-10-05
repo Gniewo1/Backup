@@ -8,6 +8,7 @@ import Profile from './components/Profile'
 import SellCard from './components/SellCard'
 import SearchOffers from './components/Test'
 import SearchResults from './components/SearchResults'
+import OfferDetails from './components/OfferDetails';
 import {Routes, Route, useLocation, Navigate} from 'react-router-dom'
 import axios from 'axios'
 
@@ -61,6 +62,7 @@ function App() {
      <Route path="/sell-card" element={<SellCard />} />
      <Route path="/search" element={<SearchResults />} />
      <Route path="/test" element={<SearchOffers />} />
+     <Route path="/offers/:offerId" element={<OfferDetails />} />
     </Routes>
     </>
   )

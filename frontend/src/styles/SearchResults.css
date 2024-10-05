@@ -49,3 +49,8 @@
 .offer-button:hover {
     background-color: #0056b3;
 }
+
+.empty-container {
+    padding-top: 25px;
+    height: 25px;
+  }

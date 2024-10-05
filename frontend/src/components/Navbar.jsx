@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate, Link } from 'react-router-dom';
 import '../styles/Navbar.css';
 import { CheckAuthentication } from '../functions/CheckAuthentication';
 import { LogOut } from '../functions/LogOut';
@@ -60,7 +60,7 @@ const Navbar = () => {
       <div className="navbar-logo">
         <Link to="/">MyApp</Link>
       </div>
-      {(currentPath === '/' || currentPath === '/search') && (
+
       <form className="navbar-search" onSubmit={handleSearch}>
         <input 
           type="text" 
@@ -70,7 +70,7 @@ const Navbar = () => {
         />
         <button type="submit">Search</button>
       </form>
-      )}
+
 
       
       <ul className="navbar-links">
