@@ -29,6 +29,8 @@ const OfferDetails = () => {
 
     }, [offerId]);
 
+
+
         const handleClick = () => {
             if (isAuthenticated) {
                 handleBuy();  // Trigger the buy function if authenticated
@@ -39,7 +41,7 @@ const OfferDetails = () => {
 
         const handleBuy = () => {
             if (isAuthenticated) {
-                alert(`You are buying ${offer.card_name} for $${offer.offer_price}`);
+                navigate(`/test/${offerId}`);
             }
         };
 

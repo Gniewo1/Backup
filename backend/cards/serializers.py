@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Card, CardOffer
+from .models import Card, CardOffer, CardPurchase
 
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,4 +17,9 @@ class CardOfferSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         validated_data['user'] = user
         return CardOffer.objects.create(**validated_data)
+    
+class CardPurchaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CardPurchase
+        fields = ['buyer', 'card_offer', 'city', 'zip_code', 'street', 'house_number', 'apartment_number']
         
