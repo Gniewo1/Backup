@@ -10,7 +10,7 @@ class CardSerializer(serializers.ModelSerializer):
 class CardOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardOffer
-        fields = ['card', 'offer_price'] 
+        fields = ['card', 'offer_price', 'is_active'] 
 
     def create(self, validated_data):
         # Automatically set the user from the request context

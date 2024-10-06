@@ -58,3 +58,18 @@ def create_card_purchase(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def update_card_offer_status(request, pk):
+    try:
+        card_offer = CardOffer.objects.get(pk=pk)
+    except CardOffer.DoesNotExist:
+        return Response({'error': 'Card offer not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Update the `is_active` field based on the request data
+    card_offer.is_active = request.data.get('is_active', card_offer.is_active)
+    card_offer.save()
+    
+    # Serialize and return the updated card offer
+    serializer = CardOfferSerializer(card_offer)
+    return Response(serializer.data, status=status.HTTP_200_OK)

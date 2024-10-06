@@ -41,7 +41,7 @@ const OfferDetails = () => {
 
         const handleBuy = () => {
             if (isAuthenticated) {
-                navigate(`/test/${offerId}`);
+                navigate(`/buy-card/${offerId}`);
             }
         };
 

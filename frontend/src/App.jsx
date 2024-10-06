@@ -6,7 +6,7 @@ import Home from './components/Home'
 import Navbar from './components/Navbar'
 import Profile from './components/Profile'
 import SellCard from './components/SellCard'
-import CardPurchaseForm from './components/Test'
+import CardPurchaseForm from './components/BuyCard'
 import SearchResults from './components/SearchResults'
 import OfferDetails from './components/OfferDetails';
 import {Routes, Route, useLocation, Navigate} from 'react-router-dom'
@@ -61,7 +61,7 @@ function App() {
      <Route path="/profile" element={<Profile />} />
      <Route path="/sell-card" element={<SellCard />} />
      <Route path="/search" element={<SearchResults />} />
-     <Route path="/test/:offerId" element={<CardPurchaseForm />} />
+     <Route path="/buy-card/:offerId" element={<CardPurchaseForm />} />
      <Route path="/offers/:offerId" element={<OfferDetails />} />
     </Routes>
     </>
