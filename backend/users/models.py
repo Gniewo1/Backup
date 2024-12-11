@@ -6,6 +6,7 @@ from django.conf import settings
 
 class CustomUser(AbstractUser):
     verified = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
 
 class TestClass(models.Model):
@@ -20,7 +21,7 @@ class VerificationRequest(models.Model):
         ('rejected', 'Rejected'),
     ]
     
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='verification_requests')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,  related_name='verification_requests')
     request_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     updated_at = models.DateTimeField(auto_now=True)
