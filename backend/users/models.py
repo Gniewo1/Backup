@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
+import random
 
 # User = get_user_model()
 
@@ -34,3 +35,13 @@ class VerificationRequest(models.Model):
         verbose_name = 'Verification Request'
         verbose_name_plural = 'Verification Requests'
         ordering = ['-request_date']
+
+
+class VerificationCode(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='verification_codes')
+    code = models.CharField(max_length=6, default=random.randint(100000, 999999))
+
+    # def save(self, *args, **kwargs):
+    #     if not self.code:
+    #         self.code = str(random.randint(100000, 999999))
+    #     super().save(*args, **kwargs)

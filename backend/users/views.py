@@ -132,7 +132,7 @@ def send_verification_email(request):
     try:
         # Extract data from the request
         data = request.data
-        subject = data.get('subject')
+        subject = "Verification"
         message = data.get('message')
         recipient_list = data.get('recipient_list')
 

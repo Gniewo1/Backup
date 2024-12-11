@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, TestClass, VerificationRequest
+from .models import CustomUser, TestClass, VerificationRequest, VerificationCode
 
 
 # class CustomUserAdmin(UserAdmin):
@@ -13,3 +13,4 @@ from .models import CustomUser, TestClass, VerificationRequest
 admin.site.register(CustomUser)
 admin.site.register(TestClass)
 admin.site.register(VerificationRequest)
+admin.site.register(VerificationCode)
