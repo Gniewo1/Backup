@@ -7,10 +7,12 @@ from .serializers import RegisterSerializer, TestSerializer, VerificationRequest
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import login
-# from django.contrib.auth.models import User
-# from django.contrib.auth.decorators import login_required
 from .models import TestClass, VerificationRequest, CustomUser
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.core.mail import send_mail
+import logging
+logger = logging.getLogger(__name__)
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -123,3 +125,38 @@ class VerificationRequestUpdate(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def send_verification_email(request):
+    try:
+        # Extract data from the request
+        data = request.data
+        subject = data.get('subject')
+        message = data.get('message')
+        recipient_list = data.get('recipient_list')
+
+        # Log the received data for debugging
+        logger.info(f"Received data: Subject: {subject}, Message: {message}, Recipients: {recipient_list}")
+
+        # Basic validation
+        if not subject or not message or not recipient_list:
+            return JsonResponse({'error': 'All fields (subject, message, recipients) are required.'}, status=400)
+
+        # Send the email
+        send_mail(
+            subject,
+            message,
+            'your_email@gmail.com',  # Replace this with your actual sender email
+            recipient_list,
+            fail_silently=False,
+        )
+
+        # Log success
+        logger.info("Email sent successfully")
+        return JsonResponse({'message': 'Email sent successfully.'}, status=200)
+
+    except Exception as e:
+        # Log the error details
+        logger.error(f"Error sending email: {e}")
+        return JsonResponse({'error': str(e)}, status=500)
