@@ -7,10 +7,11 @@ from .serializers import RegisterSerializer, TestSerializer, VerificationRequest
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import login
-from .models import TestClass, VerificationRequest, CustomUser
+from .models import TestClass, VerificationRequest, CustomUser, VerificationCode
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
 import logging
 logger = logging.getLogger(__name__)
 
@@ -62,7 +63,7 @@ def get_user_info(request):
         'username': user.username,
         'email': user.email,
         'is_admin':user.is_staff or user.is_superuser,
-        'is_verified': user.verified,
+        'is_verified': user.is_verified,
     }
     return Response(data)
 
@@ -160,3 +161,25 @@ def send_verification_email(request):
         # Log the error details
         logger.error(f"Error sending email: {e}")
         return JsonResponse({'error': str(e)}, status=500)
+    
+
+User = get_user_model()
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def verify_user(request):
+    code = request.data.get('code')
+    user_id = request.data.get('user_id')  
+    print(code)
+    print(user_id)
+
+    try:
+        code = VerificationCode.objects.get(user=user_id, code=code)
+        print(code)
+        user = User.objects.get(id=user_id)
+        user.is_verified = True
+        # user.verification_code = None 
+        user.save()
+        return Response({'message': 'Verification successful'}, status=status.HTTP_200_OK)
+    except VerificationCode.DoesNotExist:
+        return Response({'error': 'Invalid verification code'}, status=status.HTTP_400_BAD_REQUEST)

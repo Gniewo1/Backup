@@ -6,7 +6,7 @@ import random
 # User = get_user_model()
 
 class CustomUser(AbstractUser):
-    verified = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
 
