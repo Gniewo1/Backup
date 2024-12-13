@@ -180,6 +180,7 @@ def verify_user(request):
         user.is_verified = True
         # user.verification_code = None 
         user.save()
+        code.delete()
         return Response({'message': 'Verification successful'}, status=status.HTTP_200_OK)
     except VerificationCode.DoesNotExist:
         return Response({'error': 'Invalid verification code'}, status=status.HTTP_400_BAD_REQUEST)
