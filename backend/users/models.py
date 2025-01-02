@@ -41,7 +41,3 @@ class VerificationCode(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='verification_codes')
     code = models.CharField(max_length=6, default=random.randint(100000, 999999))
 
-    # def save(self, *args, **kwargs):
-    #     if not self.code:
-    #         self.code = str(random.randint(100000, 999999))
-    #     super().save(*args, **kwargs)

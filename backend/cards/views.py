@@ -1,21 +1,27 @@
 from rest_framework import generics
 from .models import Card, CardOffer
-from .serializers import CardSerializer, CardOfferSerializer, CardPurchaseSerializer
+from .serializers import CardSerializer, CardOfferSerializer, CardOfferSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.http import JsonResponse, Http404
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 class CardListView(generics.ListAPIView):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
     permission_classes = [AllowAny]
 
-class CardOfferCreateView(generics.CreateAPIView):
-    queryset = CardOffer.objects.all()
-    serializer_class = CardOfferSerializer
-    permission_classes = [IsAuthenticated]  
+class CardOfferCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = CardOfferSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(seller=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -51,13 +57,13 @@ def offer_details(request, offer_id):
 
     return JsonResponse(data)
 
-@api_view(['POST'])
-def create_card_purchase(request):
-    serializer = CardPurchaseSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# @api_view(['POST'])
+# def create_card_purchase(request):
+#     serializer = CardPurchaseSerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PATCH'])
 def update_card_offer_status(request, pk):

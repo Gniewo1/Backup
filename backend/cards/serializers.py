@@ -10,13 +10,8 @@ class CardSerializer(serializers.ModelSerializer):
 class CardOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardOffer
-        fields = ['card', 'offer_price', 'is_active'] 
-
-    def create(self, validated_data):
-        # Automatically set the user from the request context
-        user = self.context['request'].user
-        validated_data['user'] = user
-        return CardOffer.objects.create(**validated_data)
+        fields = '__all__'
+        read_only_fields = ['seller', 'created_at', 'is_active']
     
 class CardPurchaseSerializer(serializers.ModelSerializer):
     class Meta:
