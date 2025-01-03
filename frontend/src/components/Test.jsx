@@ -2,19 +2,24 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import '../styles/CardOffer.css'; // Import CSS for styling
 import Navbar from './Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const Test = () => {
   const [cards, setCards] = useState([]); // Full list of cards (names only)
   const [searchTerm, setSearchTerm] = useState(""); // Search input state
   const [suggestions, setSuggestions] = useState([]); // Suggestions for display
   const [selectedCard, setSelectedCard] = useState(null); // Selected card details
+  const [selectedCard_Offer, setSelectedCard_Offer] = useState(null); // Selected card details
   const [offerPrice, setOfferPrice] = useState(''); // Set price
   const [auctionPrice, setAuctionPrice] = useState(''); // Set price of auction
   const [frontImage, setFrontImage] = useState(null); // State for front image
   const [backImage, setBackImage] = useState(null);  // State for back image
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState('');
   const [offerType, setOfferType] = useState("buy_now");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch all card names (without images)
@@ -29,6 +34,11 @@ const Test = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleFileChange = (e, setFile) => {
+    const file = e.target.files[0];
+    setFile(file);
+  };
 
   // Handle input changes in the search bar
   const handleSearchChange = (e) => {
@@ -57,11 +67,53 @@ const Test = () => {
     axios
       .get(`http://localhost:8000/cards/card-image/${cardId}/`)
       .then((response) => {
+        console.log(response.data.id)
+        setSelectedCard_Offer(response.data.id);
         setSelectedCard(response.data); // Update selected card details
       })
       .catch(() => {
         setError("Failed to fetch card details.");
       });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append('card', selectedCard_Offer);
+    formData.append('buy_now_price', offerPrice);
+    formData.append('auction_start_price', auctionPrice);
+    formData.append('offer_type', offerType);
+    
+    // Check if you have front and back images, and append them to formData
+    if (frontImage) formData.append('front_image', frontImage);
+    if (backImage) formData.append('back_image', backImage);
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+    try {
+      const token = localStorage.getItem('token'); // Retrieve the token from local storage
+  
+      const response = await axios.post('http://localhost:8000/cards/create-offers/', formData, {
+        headers: {
+          // 'Content-Type': 'multipart/form-data', // Important for file uploads
+          'Authorization': `Token ${token}`, // Add token to headers
+        }
+      });
+  
+      setSuccess('Offer created successfully!');
+      setError('');
+      // Reset form fields
+      setSelectedCard('');
+      setOfferPrice('');
+      // setSelectedCardImage(''); // Reset selected card image
+      navigate('/');
+
+    } catch (err) {
+      // setError('Failed to create offer. Please try again.');
+      // setSuccess('');
+      console.error(err);
+    }
   };
 
   if (loading) return <p>Loading cards...</p>;
@@ -74,6 +126,7 @@ const Test = () => {
 
       <div className="sell-offer-form-container"> 
       <h1>Sell Card</h1>
+
 
       {/* Search Bar */}
       <input
@@ -215,8 +268,9 @@ const Test = () => {
               className="form-input"
             />
           </div>
-          <button type="submit" className="btn-submit">Submit Offer</button>
-        
+          <form onSubmit={handleSubmit}>
+        <button type="submit" className="btn-submit">Submit Offer</button>
+      </form>
     </div>
     </>
   );
