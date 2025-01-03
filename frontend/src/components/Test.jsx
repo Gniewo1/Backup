@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import '../styles/CardOffer.css'; // Import CSS for styling
+import Navbar from './Navbar';
 
 const Test = () => {
   const [cards, setCards] = useState([]); // Full list of cards (names only)
   const [searchTerm, setSearchTerm] = useState(""); // Search input state
   const [suggestions, setSuggestions] = useState([]); // Suggestions for display
   const [selectedCard, setSelectedCard] = useState(null); // Selected card details
+  const [offerPrice, setOfferPrice] = useState(''); // Set price
+  const [frontImage, setFrontImage] = useState(null); // State for front image
+  const [backImage, setBackImage] = useState(null);  // State for back image
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -61,8 +66,11 @@ const Test = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div style={{ maxWidth: "400px", margin: "0 auto" }}>
-      <h1>Search for Cards</h1>
+    <>
+      <Navbar />
+
+      <div className="sell-offer-form-container"> 
+      <h1>Sell Card</h1>
 
       {/* Search Bar */}
       <input
@@ -72,7 +80,7 @@ const Test = () => {
         onChange={handleSearchChange}
         style={{
           padding: "10px",
-          width: "100%",
+          width: "90%",
           marginBottom: "5px",
           fontSize: "16px",
           border: "1px solid #ccc",
@@ -130,7 +138,42 @@ const Test = () => {
           />
         </div>
       )}
+
+        <div className="form-group">
+            <label htmlFor="offerPrice">Offer Price [€] :</label>
+            <input
+              type="number"
+              id="offerPrice"
+              value={offerPrice}
+              onChange={(e) => setOfferPrice(e.target.value)}
+              required
+              className="form-input"
+            />
+        </div>
+          <div className="form-group">
+            <label htmlFor="frontImage">Front Image:</label>
+            <input
+              type="file"
+              id="frontImage"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, setFrontImage)}
+              className="form-input"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="backImage">Back Image:</label>
+            <input
+              type="file"
+              id="backImage"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, setBackImage)}
+              className="form-input"
+            />
+          </div>
+
+
     </div>
+    </>
   );
 };
 
