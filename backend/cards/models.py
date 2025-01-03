@@ -1,6 +1,9 @@
 from django.db import models
 from users.models import CustomUser
 from django.conf import settings
+from datetime import timedelta
+from django.utils.timezone import now
+
 
 # Create your models here.
 
@@ -26,7 +29,7 @@ class CardOffer(models.Model):
     offer_type = models.CharField(max_length=20, choices=OFFER_TYPES)
     buy_now_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     auction_start_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    auction_end_date = models.DateTimeField(null=True, blank=True)
+    auction_end_date = models.DateTimeField(default=lambda: now() + timedelta(weeks=2), null=True, blank=True)
     front_image = models.ImageField(upload_to='card_offer_images/', null=True, blank=True)
     back_image = models.ImageField(upload_to='card_offer_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

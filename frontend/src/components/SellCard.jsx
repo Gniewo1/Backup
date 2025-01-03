@@ -54,8 +54,8 @@ const CardOffer = () => {
     e.preventDefault();
   
     const formData = new FormData();
-    formData.append('card', cards);
-    formData.append('offer_price', offerPrice);
+    formData.append('card', selectedCard);
+    formData.append('auction_start_price', offerPrice);
     
     // Check if you have front and back images, and append them to formData
     if (frontImage) formData.append('front_image', frontImage);
@@ -66,7 +66,7 @@ const CardOffer = () => {
     try {
       const token = localStorage.getItem('token'); // Retrieve the token from local storage
   
-      const response = await axios.post('http://localhost:8000/cards/card-offers/', formData, {
+      const response = await axios.post('http://localhost:8000/cards/create-offers/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Important for file uploads
           'Authorization': `Token ${token}`, // Add token to headers

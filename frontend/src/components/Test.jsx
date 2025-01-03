@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
 
 const Test = () => {
@@ -11,6 +11,24 @@ const Test = () => {
         front_image: null,
         back_image: null,
     });
+
+    useEffect(() => {
+        const fetchCards = async () => {
+          try {
+            const response = await axios.get('http://localhost:8000/cards/cards/');
+            if (Array.isArray(response.data)) {
+              setCards(response.data);
+            } else {
+              setError('Unexpected response format.');
+            }
+          } catch (err) {
+            setError('Failed to fetch cards. Please try again.');
+            console.error(err);
+          }
+        };
+    
+        fetchCards();
+      }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
