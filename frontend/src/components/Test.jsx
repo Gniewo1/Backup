@@ -1,109 +1,137 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Test = () => {
-    const [formData, setFormData] = useState({
-        card: "",
-        offer_type: "",
-        buy_now_price: "",
-        auction_start_price: "",
-        auction_end_date: "",
-        front_image: null,
-        back_image: null,
-    });
+  const [cards, setCards] = useState([]); // Full list of cards (names only)
+  const [searchTerm, setSearchTerm] = useState(""); // Search input state
+  const [suggestions, setSuggestions] = useState([]); // Suggestions for display
+  const [selectedCard, setSelectedCard] = useState(null); // Selected card details
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchCards = async () => {
-          try {
-            const response = await axios.get('http://localhost:8000/cards/cards/');
-            if (Array.isArray(response.data)) {
-              setCards(response.data);
-            } else {
-              setError('Unexpected response format.');
-            }
-          } catch (err) {
-            setError('Failed to fetch cards. Please try again.');
-            console.error(err);
-          }
-        };
-    
-        fetchCards();
-      }, []);
+  useEffect(() => {
+    // Fetch all card names (without images)
+    axios
+      .get("http://localhost:8000/cards/card-names/")
+      .then((response) => {
+        setCards(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to fetch card data.");
+        setLoading(false);
+      });
+  }, []);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevState) => ({ ...prevState, [name]: value }));
-    };
+  // Handle input changes in the search bar
+  const handleSearchChange = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearchTerm(searchValue);
 
-    const handleFileChange = (e) => {
-        const { name, files } = e.target;
-        setFormData((prevState) => ({ ...prevState, [name]: files[0] }));
-    };
+    // Update suggestions dynamically
+    if (searchValue.trim() !== "") {
+      const filtered = cards.filter((card) =>
+        card.name.toLowerCase().includes(searchValue)
+      );
+      setSuggestions(filtered);
+    } else {
+      setSuggestions([]); // Clear suggestions if input is empty
+    }
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const token = localStorage.getItem("token"); // Use appropriate token storage/retrieval
-        const config = {
-            headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Token ${token}`,
-            },
-        };
+  const handleSuggestionClick = (card) => {
+    setSearchTerm(card.name); // Set the search bar value to the selected suggestion
+    setSuggestions([]); // Clear suggestions after selection
+    fetchCardDetails(card.id); // Fetch selected card's image
+  };
 
-        const form = new FormData();
-        Object.keys(formData).forEach((key) => {
-            form.append(key, formData[key]);
-        });
+  // Fetch card details (including image) for the selected card
+  const fetchCardDetails = (cardId) => {
+    axios
+      .get(`http://localhost:8000/cards/card-image/${cardId}/`)
+      .then((response) => {
+        setSelectedCard(response.data); // Update selected card details
+      })
+      .catch(() => {
+        setError("Failed to fetch card details.");
+      });
+  };
 
-        for (let [key, value] of form.entries()) {
-          console.log(`${key}:`, value);
-        }
+  if (loading) return <p>Loading cards...</p>;
+  if (error) return <p>{error}</p>;
 
-        try {
-            const response = await axios.post("http://localhost:8000/cards/create-offers/", form, config);
-            console.log("Offer created:", response.data);
-        } catch (error) {
-            console.error("Error creating offer:", error.response.data);
-        }
-    };
+  return (
+    <div style={{ maxWidth: "400px", margin: "0 auto" }}>
+      <h1>Search for Cards</h1>
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Card ID:</label>
-                <input type="text" name="card" onChange={handleChange} required />
-            </div>
-            <div>
-                <label>Offer Type:</label>
-                <select name="offer_type" onChange={handleChange} required>
-                    <option value="buy_now">Buy Now</option>
-                    <option value="auction">Auction</option>
-                    <option value="buy_now_and_auction">Buy Now and Auction</option>
-                </select>
-            </div>
-            <div>
-                <label>Buy Now Price:</label>
-                <input type="number" name="buy_now_price" onChange={handleChange} />
-            </div>
-            <div>
-                <label>Auction Start Price:</label>
-                <input type="number" name="auction_start_price" onChange={handleChange} />
-            </div>
-            <div>
-                <label>Auction End Date:</label>
-                <input type="datetime-local" name="auction_end_date" onChange={handleChange} />
-            </div>
-            <div>
-                <label>Front Image:</label>
-                <input type="file" name="front_image" onChange={handleFileChange} />
-            </div>
-            <div>
-                <label>Back Image:</label>
-                <input type="file" name="back_image" onChange={handleFileChange} />
-            </div>
-            <button type="submit">Add Offer</button>
-        </form>
-    );
+      {/* Search Bar */}
+      <input
+        type="text"
+        placeholder="Search for a card..."
+        value={searchTerm}
+        onChange={handleSearchChange}
+        style={{
+          padding: "10px",
+          width: "100%",
+          marginBottom: "5px",
+          fontSize: "16px",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+        }}
+      />
+
+      {/* Suggestions */}
+      {suggestions.length > 0 && (
+        <ul
+          style={{
+            listStyleType: "none",
+            padding: "0",
+            margin: "0",
+            border: "1px solid #ccc",
+            borderTop: "none",
+            borderRadius: "0 0 4px 4px",
+            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+            maxHeight: "150px",
+            overflowY: "auto",
+            background: "#fff",
+          }}
+        >
+          {suggestions.map((card) => (
+            <li
+              key={card.id}
+              onClick={() => handleSuggestionClick(card)}
+              style={{
+                padding: "10px",
+                cursor: "pointer",
+                borderBottom: "1px solid #f0f0f0",
+              }}
+              onMouseOver={(e) => (e.target.style.background = "#f9f9f9")}
+              onMouseOut={(e) => (e.target.style.background = "#fff")}
+            >
+              {card.name}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* Selected Card Image */}
+      {selectedCard && (
+        <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <h2>{selectedCard.name}</h2>
+          <img
+            src={selectedCard.image}
+            alt={selectedCard.name}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "500px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Test;

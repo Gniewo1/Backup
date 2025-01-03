@@ -22,6 +22,24 @@ class CardOfferCreateView(APIView):
             serializer.save(seller=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#fetch all card names 
+def card_names(request):
+    cards = Card.objects.all().values('id', 'name')  # Queryset with only `id` and `name`
+    card_list = list(cards)  # Convert queryset to list
+    return JsonResponse(card_list, safe=False)
+
+#fetch current card image
+def card_image(request, card_id):
+    card = Card.objects.filter(id=card_id).first()
+    if card:
+        card_data = {
+            "id": card.id,
+            "name": card.name,
+            "image": request.build_absolute_uri(card.image.url)
+        }
+        return JsonResponse(card_data)
+    return JsonResponse({'error': 'Card not found'}, status=404)
 
 
 
