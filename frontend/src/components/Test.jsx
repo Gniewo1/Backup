@@ -9,10 +9,12 @@ const Test = () => {
   const [suggestions, setSuggestions] = useState([]); // Suggestions for display
   const [selectedCard, setSelectedCard] = useState(null); // Selected card details
   const [offerPrice, setOfferPrice] = useState(''); // Set price
+  const [auctionPrice, setAuctionPrice] = useState(''); // Set price of auction
   const [frontImage, setFrontImage] = useState(null); // State for front image
   const [backImage, setBackImage] = useState(null);  // State for back image
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [offerType, setOfferType] = useState("buy_now");
 
   useEffect(() => {
     // Fetch all card names (without images)
@@ -68,6 +70,7 @@ const Test = () => {
   return (
     <>
       <Navbar />
+      <div className="empty-container"></div>
 
       <div className="sell-offer-form-container"> 
       <h1>Sell Card</h1>
@@ -139,8 +142,33 @@ const Test = () => {
         </div>
       )}
 
-        <div className="form-group">
-            <label htmlFor="offerPrice">Offer Price [€] :</label>
+         {/* Offer Type Dropdown */}
+         <div style={{ marginBottom: "15px" }}>
+              <label style={{ display: "block", marginBottom: "5px" }}>
+                Offer Type:
+              </label>
+              <select
+                value={offerType}
+                onChange={(e) => setOfferType(e.target.value)}
+                style={{
+                  padding: "10px",
+                  width: "100%",
+                  fontSize: "16px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                }}
+              >
+                <option value="buy_now">Buy Now</option>
+                <option value="auction">Auction</option>
+                <option value="buy_now_and_auction">Buy Now and Auction</option>
+              </select>
+            </div>
+
+
+            {/* Conditionally render the price fields */}
+        {offerType !== "auction" && (
+          <div className="form-group">
+            <label htmlFor="offerPrice">Buy Now Price [€] :</label>
             <input
               type="number"
               id="offerPrice"
@@ -149,7 +177,24 @@ const Test = () => {
               required
               className="form-input"
             />
-        </div>
+          </div>
+        )}
+
+        {offerType !== "buy_now" && (
+          <div className="form-group">
+            <label htmlFor="offerPrice">Auction Price [€] :</label>
+            <input
+              type="number"
+              id="auctionPrice"
+              value={auctionPrice}
+              onChange={(e) => setAuctionPrice(e.target.value)}
+              required={offerType === "auction" || offerType === "buy_now_and_auction"}
+              className="form-input"
+            />
+          </div>
+        )}
+
+
           <div className="form-group">
             <label htmlFor="frontImage">Front Image:</label>
             <input
@@ -170,8 +215,8 @@ const Test = () => {
               className="form-input"
             />
           </div>
-
-
+          <button type="submit" className="btn-submit">Submit Offer</button>
+        
     </div>
     </>
   );
