@@ -12,6 +12,7 @@ import axios from "axios";
 
 const Navbar = () => {
   const [cards, setCards] = useState([]); // Full list of cards (names only)
+  const [suggestions, setSuggestions] = useState([]); // Suggestions for display
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -68,6 +69,27 @@ const Navbar = () => {
     verifyAuthentication();
   }, []);
 
+
+  const handleSearchChange = (e) => {
+    const searchValue = e.target.value.toLowerCase();
+    setSearchQuery(searchValue);
+
+    // Update suggestions dynamically
+    if (searchValue.trim() !== "") {
+      const filtered = cards.filter((card) =>
+        card.name.toLowerCase().includes(searchValue)
+      );
+      setSuggestions(filtered);
+    } else {
+      setSuggestions([]); // Clear suggestions if input is empty
+    }
+  };
+
+  const handleSuggestionClick = (card) => {
+    setSearchQuery(card.name); // Set the search bar value to the selected suggestion
+    setSuggestions([]); // Clear suggestions after selection
+    fetchCardDetails(card.id); // Fetch selected card's image
+  };
   
 
   if (loading) return <p>Loading cards...</p>;
@@ -85,9 +107,45 @@ const Navbar = () => {
         <input 
           type="text" 
           placeholder="Search..." 
-          value={searchQuery} 
-          onChange={(e) => setSearchQuery(e.target.value)} 
+          value={searchQuery}
+          onChange={handleSearchChange}
+          // onChange={(e) => setSearchQuery(e.target.value)} 
         />
+
+          {/* Suggestions */}
+      {suggestions.length > 0 && (
+        <ul
+          style={{
+            listStyleType: "none",
+            padding: "0",
+            margin: "0",
+            border: "1px solid #ccc",
+            borderTop: "none",
+            borderRadius: "0 0 4px 4px",
+            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+            maxHeight: "150px",
+            overflowY: "auto",
+            background: "#fff",
+          }}
+        >
+          {suggestions.map((card) => (
+            <li
+              key={card.id}
+              onClick={() => handleSuggestionClick(card)}
+              style={{
+                padding: "10px",
+                cursor: "pointer",
+                borderBottom: "1px solid #f0f0f0",
+              }}
+              onMouseOver={(e) => (e.target.style.background = "#f9f9f9")}
+              onMouseOut={(e) => (e.target.style.background = "#fff")}
+            >
+              {card.name}
+            </li>
+          ))}
+        </ul>
+      )}
+
         <button type="submit">Search</button>
       </form>
 
