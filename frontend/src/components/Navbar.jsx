@@ -3,12 +3,17 @@ import {  useNavigate, Link } from 'react-router-dom';
 import '../styles/Navbar.css';
 import { CheckAuthentication } from '../functions/CheckAuthentication';
 import { LogOut } from '../functions/LogOut';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import axios from "axios";
+
 
 
 
 
 const Navbar = () => {
+  const [cards, setCards] = useState([]); // Full list of cards (names only)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const currentPath = window.location.pathname; 
@@ -41,6 +46,20 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+
+    axios
+    .get("http://localhost:8000/cards/card-names/")
+    .then((response) => {
+      // console.log(response.data);
+      setCards(response.data);
+      setLoading(false);
+    })
+    .catch((error) => {
+      setError("Failed to fetch card data.");
+      setLoading(false);
+    });
+
+
     const verifyAuthentication = async () => {
       const authenticated = await CheckAuthentication();
       setIsAuthenticated(authenticated);
@@ -51,7 +70,8 @@ const Navbar = () => {
 
   
 
-
+  if (loading) return <p>Loading cards...</p>;
+  if (error) return <p>{error}</p>;
 
 
   return (

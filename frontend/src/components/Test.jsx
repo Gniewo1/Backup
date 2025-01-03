@@ -67,7 +67,7 @@ const Test = () => {
     axios
       .get(`http://localhost:8000/cards/card-image/${cardId}/`)
       .then((response) => {
-        console.log(response.data.id)
+        // console.log(response.data.id)
         setSelectedCard_Offer(response.data.id);
         setSelectedCard(response.data); // Update selected card details
       })
