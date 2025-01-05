@@ -104,50 +104,39 @@ const Navbar = () => {
       </div>
 
       <form className="navbar-search" onSubmit={handleSearch}>
-        <input 
-          type="text" 
-          placeholder="Search..." 
-          value={searchQuery}
-          onChange={handleSearchChange}
-          // onChange={(e) => setSearchQuery(e.target.value)} 
-        />
+    <input 
+      type="text" 
+      placeholder="Search..." 
+      value={searchQuery}
+      onChange={handleSearchChange}
+    />
 
-          {/* Suggestions */}
-      {suggestions.length > 0 && (
-        <ul
-          style={{
-            listStyleType: "none",
-            padding: "0",
-            margin: "0",
-            border: "1px solid #ccc",
-            borderTop: "none",
-            borderRadius: "0 0 4px 4px",
-            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-            maxHeight: "150px",
-            overflowY: "auto",
-            background: "#fff",
-          }}
-        >
-          {suggestions.map((card) => (
-            <li
-              key={card.id}
-              onClick={() => handleSuggestionClick(card)}
-              style={{
-                padding: "10px",
-                cursor: "pointer",
-                borderBottom: "1px solid #f0f0f0",
-              }}
-              onMouseOver={(e) => (e.target.style.background = "#f9f9f9")}
-              onMouseOut={(e) => (e.target.style.background = "#fff")}
-            >
-              {card.name}
-            </li>
-          ))}
-        </ul>
-      )}
+    <button type="submit">Search</button>
 
+    {/* Suggestions */}
+    {suggestions.length > 0 && (
+      <ul>
+        {suggestions.map((card) => (
+          <li
+            key={card.id}
+            onClick={() => handleSuggestionClick(card)}
+            style={{
+              padding: "10px",
+              cursor: "pointer",
+              borderBottom: "1px solid #f0f0f0",
+            }}
+            onMouseOver={(e) => (e.target.style.background = "#f9f9f9")}
+            onMouseOut={(e) => (e.target.style.background = "#fff")}
+          >
+            {card.name}
+          </li>
+        ))}
+      </ul>
+    )}
+  </form>
+{/* 
         <button type="submit">Search</button>
-      </form>
+      </form> */}
 
 
       
