@@ -65,10 +65,11 @@ def offer_details(request, offer_id):
     # Prepare the offer data for response
     data = {
         'id': offer.id,
-        'user': offer.user.username,
+        'user': offer.seller.username,
         'card_name': offer.card.name,
-        'card_image': offer.card.image.url,  # Assuming 'image' is a File/ImageField
-        'offer_price': offer.offer_price,
+        'card_image': offer.front_image.url if offer.front_image else None,  # Assuming 'image' is a File/ImageField
+        'auction_price': offer.auction_start_price,
+        'buy_now_price': offer.buy_now_price,
         'created_at': offer.created_at,
         'is_active': offer.is_active,
     }

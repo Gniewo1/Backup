@@ -56,7 +56,8 @@ const OfferDetails = () => {
                 <h2>{offer.card_name}</h2>
                 <img src={`http://localhost:8000/${offer.card_image}`} alt={offer.card_name} />
                 <p>Offered by: <strong>{offer.user}</strong></p>
-                <p>Price: <strong>${offer.offer_price}</strong></p>
+                {offer.auction_price && (<p>Auction Price: <strong>${offer.auction_price}</strong></p>)}
+                {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
                 {/* <p>Date Created: {new Date(offer.created_at).toLocaleString()}</p>
                 {offer.is_active ? <p>Status: Active</p> : <p>Status: Inactive</p>} */}
                 <button 
