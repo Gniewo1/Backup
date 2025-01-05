@@ -88,7 +88,7 @@ const Navbar = () => {
   const handleSuggestionClick = (card) => {
     setSearchQuery(card.name); // Set the search bar value to the selected suggestion
     setSuggestions([]); // Clear suggestions after selection
-    fetchCardDetails(card.id); // Fetch selected card's image
+    // fetchCardDetails(card.id); // Fetch selected card's image
   };
   
 

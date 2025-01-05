@@ -41,14 +41,14 @@ const SearchResults = () => {
                 {results.map((offer, index) => (
                     <div className="offer-card" key={index}>
                         <img 
-                            src={`http://localhost:8000/media/${offer.card__image}`} 
+                            src={`http://localhost:8000/media/${offer.front_image}`} 
                             alt={offer.card__name} 
                             className="offer-image" 
                         />
                         <div className="offer-details">
-                            <p><strong>{offer.user__username}</strong></p>
+                            <p><strong>Seller: {offer.seller__username}</strong></p>
                             <p>{offer.card__name}</p>
-                            <p>Price: <strong>${offer.offer_price}</strong></p>
+                            <p>Price: <strong>${offer.auction_start_price}</strong></p>
                             <button className="offer-button" onClick={() => handleViewOffer(offer.id)}>View Offer</button>
                         </div>
                     </div>
