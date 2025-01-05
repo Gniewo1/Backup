@@ -9,12 +9,17 @@ const OfferDetails = () => {
     const { offerId } = useParams();  // Get the offerId from the URL params
     const [offer, setOffer] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [duration, setDuration] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`http://localhost:8000/cards/offers/${offerId}/`)
             .then(response => {
                 setOffer(response.data);
+                const auctionEndDate = new Date(response.data.auction_end_date);
+                const currentDate = new Date();
+                setDuration(auctionEndDate-currentDate);
+
             })
             .catch(error => {
                 console.error('Error fetching offer details:', error);
@@ -58,8 +63,8 @@ const OfferDetails = () => {
                 <p>Offered by: <strong>{offer.user}</strong></p>
                 {offer.auction_price && (<p>Auction Price: <strong>${offer.auction_price}</strong></p>)}
                 {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
-                {/* <p>Date Created: {new Date(offer.created_at).toLocaleString()}</p>
-                {offer.is_active ? <p>Status: Active</p> : <p>Status: Inactive</p>} */}
+                <p><strong>Offer duration: </strong></p>
+                <p>{Math.floor(duration / (1000 * 60 * 60 * 24))} days, {Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))} minutes</p>
                 <button 
                     onClick={handleClick} 
                     className={"offer-button"}

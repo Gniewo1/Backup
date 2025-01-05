@@ -71,6 +71,7 @@ def offer_details(request, offer_id):
         'auction_price': offer.auction_start_price,
         'buy_now_price': offer.buy_now_price,
         'created_at': offer.created_at,
+        'auction_end_date': offer.auction_end_date,
         'is_active': offer.is_active,
     }
 
