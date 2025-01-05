@@ -9,6 +9,7 @@ const SearchResults = () => {
     const query = searchParams.get('query');  // Retrieve 'query' parameter from the URL
     const [results, setResults] = useState([]);
     const navigate = useNavigate();
+    const [resultCount, setResultCount] = useState(0);
 
     const handleViewOffer = (offerId) => {
         // Navigate to the offer's specific page
@@ -21,11 +22,14 @@ const SearchResults = () => {
             axios.get(`http://localhost:8000/cards/search_offers/?q=${query}`)
                 .then((response) => {
                     setResults(response.data.results);
+                    setResultCount(response.data.results.length);
+                    
                 })
                 .catch((error) => {
                     console.error('Error fetching search results:', error);
                 });
         }
+        
     }, [query]);
 
 
@@ -36,7 +40,7 @@ const SearchResults = () => {
         <Navbar />
         <div className="empty-container"></div>
         <div className="search-results">
-            <h2>Search Results</h2>
+            <h2>Search Results ({resultCount})</h2>
             <div className="offers-grid">
                 {results.map((offer, index) => (
                     <div className="offer-card" key={index}>
@@ -47,8 +51,9 @@ const SearchResults = () => {
                         />
                         <div className="offer-details">
                             <p><strong>Seller: {offer.seller__username}</strong></p>
-                            <p>{offer.card__name}</p>
-                            <p>Price: <strong>${offer.auction_start_price}</strong></p>
+                            <p>Card: {offer.card__name}</p>
+                            {offer.auction_start_price && (<p>Auction Price: <strong>${offer.auction_start_price}</strong></p>)}
+                            {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
                             <button className="offer-button" onClick={() => handleViewOffer(offer.id)}>View Offer</button>
                         </div>
                     </div>
