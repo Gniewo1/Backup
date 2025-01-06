@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
 import '../styles/SearchResults.css';
+import '../styles/OfferDetails.css';
 import { CheckAuthentication } from '../functions/CheckAuthentication';
 
 const OfferDetails = () => {
@@ -54,26 +55,35 @@ const OfferDetails = () => {
             return <p>Loading...</p>;  // Show a loading message while the data is fetched
         }
 
-    return (
-        <>
-            <Navbar />
-            <div className="offer-detail">
-                <h2>{offer.card_name}</h2>
-                <img src={`http://localhost:8000/${offer.card_image}`} alt={offer.card_name} />
-                <p>Offered by: <strong>{offer.user}</strong></p>
-                {offer.auction_price && (<p>Auction Price: <strong>${offer.auction_price}</strong></p>)}
-                {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
-                <p><strong>Offer duration: </strong></p>
-                <p>{Math.floor(duration / (1000 * 60 * 60 * 24))} days, {Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))} minutes</p>
-                <button 
-                    onClick={handleClick} 
-                    className={"offer-button"}
-                >
-                    {isAuthenticated ? 'Buy Now' : 'Log in to Buy'}
-                </button>
-            </div>
-        </>
-    );
+        return (
+            <>
+                <Navbar />
+                <div className="offer-detail">
+                    <div className="offer-container">
+                        {/* Left side */}
+                        <div className="offer-left">
+                            <h1>{offer.card_name}</h1>
+                            <img src={`http://localhost:8000/${offer.card_image}`} alt={offer.card_name} />
+                        </div>
+                        
+                        {/* Right side */}
+                        <div className="offer-right">
+                            <p>Offered by: <strong>{offer.user}</strong></p>
+                            {offer.auction_price && (<p>Auction Price: <strong>${offer.auction_price}</strong></p>)}
+                            {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
+                            <button 
+                                onClick={handleClick} 
+                                className={"offer-button"}
+                            >
+                                {isAuthenticated ? 'Buy Now' : 'Log in to Buy'}
+                            </button>
+                            <p><strong>Offer duration: </strong></p>
+                            <p>{Math.floor(duration / (1000 * 60 * 60 * 24))} days, {Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))} minutes</p>
+                        </div>
+                    </div>
+                </div>
+            </>
+        );
 };
 
 export default OfferDetails;

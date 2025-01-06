@@ -1,0 +1,39 @@
+.offer-container {
+    display: flex;
+    gap: 500px; /* Space between the left and right sections */
+    align-items: center; /* Vertically align items to the center */
+    justify-content: flex-start; /* Optional: Keep items aligned to the start horizontally */
+}
+
+.offer-left {
+    flex: 1; /* Occupy one part of the space */
+    text-align: center; /* Center-align text and image in this section */
+}
+
+.offer-left img {
+    width: 450px; /* Set a fixed width for the image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add a subtle shadow */
+}
+
+.offer-right {
+    flex: 2; /* Occupy two parts of the space */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    gap: 15px; /* Space between items */
+}
+
+.offer-right button.offer-button {
+    margin-top: 20px; /* Add space above the button */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.offer-right button.offer-button:hover {
+    background-color: #0056b3;
+}
