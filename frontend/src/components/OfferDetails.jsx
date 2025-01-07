@@ -13,6 +13,7 @@ const OfferDetails = () => {
     const [duration, setDuration] = useState(null);
     const navigate = useNavigate();
     const [newOffer, setNewOffer] = useState('');
+    const [sendOffer, setSendOffer] = useState('');
 
     useEffect(() => {
         
@@ -39,12 +40,17 @@ const OfferDetails = () => {
 
     
 
-    const handleNewOfferSubmit = async () => {
+    const handleAuction = async (type) => {
         try {
             const token = localStorage.getItem('token');
+            const offerType = type;
+            let offerPriceToSend = newOffer; // Default to the user's entered offer
+            if (type === 'buy_now') {
+                offerPriceToSend = offer.buy_now_price; // Override for buy_now
+            }
             const response = await axios.post(
                 `http://localhost:8000/cards/place_offer/${offerId}/`,
-                { offer_price: newOffer },
+                { offer_price: offerPriceToSend, offer_type: offerType },
                 {
                     headers: {
                         Authorization: `Token ${token}`, // Include the token for authentication
@@ -62,17 +68,25 @@ const OfferDetails = () => {
     };
 
 
-        const handleClick = () => {
+        const handleClickBuy = () => {
             if (isAuthenticated) {
-                handleBuy();  // Trigger the buy function if authenticated
+                // setSendOffer(offer.buy_now_price);
+                handleAuction('buy_now');  // Trigger the buy function if authenticated
             } else {
                 navigate('/login');  // Redirect to home page if not authenticated
             }
         };
 
-        const handleBuy = () => {
+        // const handleBuy = () => {
+        //     if (isAuthenticated) {
+        //         handleAuction('buy_now');
+        //     }
+        // };
+
+        const handleClickAuction = () => {
             if (isAuthenticated) {
-                navigate(`/buy-card/${offerId}`);
+                // setSendOffer(newOffer);
+                handleAuction('auction');
             }
         };
 
@@ -107,7 +121,7 @@ const OfferDetails = () => {
                                         onChange={(e) => setNewOffer(e.target.value)} 
                                     />
                                     <button 
-                                        onClick={handleNewOfferSubmit} 
+                                        onClick={handleClickAuction} 
                                         className="offer-button"
                                     >
                                         Give New Offer
@@ -120,7 +134,7 @@ const OfferDetails = () => {
 
         
                             <button 
-                                onClick={handleClick} 
+                                onClick={handleClickBuy} 
                                 className={"offer-button"}
                             >
                                 {isAuthenticated ? 'Buy Now' : 'Log in to Buy'}

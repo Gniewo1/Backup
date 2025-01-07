@@ -89,8 +89,11 @@ def place_offer(request, offer_id):
         try:
             # Parse the incoming JSON data
             data = json.loads(request.body)
+            print(data)
             offer_price = data.get("offer_price")
             offer_price = Decimal(offer_price)
+            offer_type = data.get("offer_type")
+            
 
             # Get the authenticated user (buyer)
             buyer = request.user
@@ -101,24 +104,40 @@ def place_offer(request, offer_id):
             # Check if auction is active
             if card_offer.auction_end_date and now() > card_offer.auction_end_date:
                 return JsonResponse({"error": "Auction has already ended."}, status=400)
-
-            # Check if the new offer is greater than the current price
-            if offer_price <= card_offer.auction_current_price:
-                return JsonResponse({"error": "Offer price must be greater than the current auction price."}, status=400)
             
-            if offer_price >= card_offer.buy_now_price and card_offer.buy_now_price != 0:
-                return JsonResponse({"error": "Offer price must be smaller than buy_now price."}, status=400)
+            if offer_type == 'auction':
 
-            # Update the current auction price
-            card_offer.auction_current_price = offer_price
-            card_offer.save()
+                # Check if the new offer is greater than the current price
+                if offer_price <= card_offer.auction_current_price:
+                    return JsonResponse({"error": "Offer price must be greater than the current auction price."}, status=400)
+                
+                if offer_price >= card_offer.buy_now_price and card_offer.buy_now_price != 0:
+                    return JsonResponse({"error": "Offer price must be smaller than buy_now price."}, status=400)
 
-            # Create a new UserOffer
-            UserOffer.objects.create(
-                card_offer=card_offer,
-                buyer=buyer,
-                offer_price=offer_price,
-            )
+                # Update the current auction price
+                card_offer.auction_current_price = offer_price
+                card_offer.save()
+
+                # Create a new UserOffer
+                UserOffer.objects.create(
+                    card_offer=card_offer,
+                    buyer=buyer,
+                    offer_price=offer_price,
+                )
+
+            if offer_type == 'buy_now':
+                card_offer.auction_current_price = offer_price
+                card_offer.is_active = False
+                card_offer.save()
+
+                UserOffer.objects.create(
+                    card_offer=card_offer,
+                    buyer=buyer,
+                    offer_price=offer_price,
+                    is_winner = True,
+                )
+
+
 
             return JsonResponse({"message": "Offer placed successfully."}, status=200)
 

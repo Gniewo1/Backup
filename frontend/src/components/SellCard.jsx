@@ -89,9 +89,6 @@ const CardOffer = () => {
     // Check if you have front and back images, and append them to formData
     if (frontImage) formData.append('front_image', frontImage);
     if (backImage) formData.append('back_image', backImage);
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
     try {
       const token = localStorage.getItem('token'); // Retrieve the token from local storage
   
