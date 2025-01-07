@@ -105,6 +105,9 @@ def place_offer(request, offer_id):
             # Check if the new offer is greater than the current price
             if offer_price <= card_offer.auction_current_price:
                 return JsonResponse({"error": "Offer price must be greater than the current auction price."}, status=400)
+            
+            if offer_price >= card_offer.buy_now_price and card_offer.buy_now_price != 0:
+                return JsonResponse({"error": "Offer price must be smaller than buy_now price."}, status=400)
 
             # Update the current auction price
             card_offer.auction_current_price = offer_price
