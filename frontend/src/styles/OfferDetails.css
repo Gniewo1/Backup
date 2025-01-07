@@ -22,6 +22,10 @@
     display: flex;
     flex-direction: column; /* Stack content vertically */
     gap: 15px; /* Space between items */
+    border: 2px solid #ccc; /* Add a border */
+    padding: 15px; /* Add some padding inside the border */
+    border-radius: 8px; /* Optional: Round the corners */
+    background-color: #f9f9f9; /* Optional: Light background for better visibility */
 }
 
 .offer-right button.offer-button {
@@ -36,4 +40,31 @@
 
 .offer-right button.offer-button:hover {
     background-color: #0056b3;
+}
+
+.new-offer-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.new-offer-section input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.new-offer-section button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.new-offer-section button:hover {
+    background-color: #218838;
 }

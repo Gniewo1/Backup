@@ -52,7 +52,7 @@ def search_offers(request):
         results = CardOffer.objects.none()
 
     # Convert queryset to a list of dictionaries
-    data = list(results.values('id', 'front_image', 'auction_start_price', 'buy_now_price', 'card__name', 'seller__username'))
+    data = list(results.values('id', 'front_image', 'auction_current_price', 'buy_now_price', 'card__name', 'seller__username'))
 
     return JsonResponse({'results': data})
 
@@ -68,7 +68,7 @@ def offer_details(request, offer_id):
         'user': offer.seller.username,
         'card_name': offer.card.name,
         'card_image': offer.front_image.url if offer.front_image else None,  # Assuming 'image' is a File/ImageField
-        'auction_price': offer.auction_start_price,
+        'auction_price': offer.auction_current_price,
         'buy_now_price': offer.buy_now_price,
         'created_at': offer.created_at,
         'auction_end_date': offer.auction_end_date,

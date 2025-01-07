@@ -12,6 +12,7 @@ const OfferDetails = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [duration, setDuration] = useState(null);
     const navigate = useNavigate();
+    const [newOffer, setNewOffer] = useState('');
 
     useEffect(() => {
         axios.get(`http://localhost:8000/cards/offers/${offerId}/`)
@@ -35,6 +36,17 @@ const OfferDetails = () => {
 
     }, [offerId]);
 
+
+    const handleNewOfferSubmit = () => {
+        if (newOffer && parseFloat(newOffer) > offer.auction_price) {
+            // Send the new offer to the backend via API
+            console.log(`New offer submitted: $${newOffer}`);
+            // Optionally reset the field
+            setNewOffer('');
+        } else {
+            alert('Your offer must be higher than the current auction price.');
+        }
+    };
 
 
         const handleClick = () => {
@@ -70,7 +82,30 @@ const OfferDetails = () => {
                         <div className="offer-right">
                             <p>Offered by: <strong>{offer.user}</strong></p>
                             {offer.auction_price && (<p>Auction Price: <strong>${offer.auction_price}</strong></p>)}
+
+                            {/* New Offer Field */}
+                            {offer.auction_price && (
+                                <div className="new-offer-section">
+                                    <input 
+                                        type="number" 
+                                        id="new-offer" 
+                                        placeholder="Enter your offer" 
+                                        value={newOffer}
+                                        onChange={(e) => setNewOffer(e.target.value)} 
+                                    />
+                                    <button 
+                                        onClick={handleNewOfferSubmit} 
+                                        className="offer-button"
+                                    >
+                                        Give New Offer
+                                    </button>
+                                </div>
+                            )}
+
                             {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
+                            
+
+        
                             <button 
                                 onClick={handleClick} 
                                 className={"offer-button"}

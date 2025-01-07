@@ -83,6 +83,7 @@ const CardOffer = () => {
     formData.append('card', selectedCard_Offer);
     formData.append('buy_now_price', offerPrice);
     formData.append('auction_start_price', auctionPrice);
+    formData.append('auction_current_price', auctionPrice);
     formData.append('offer_type', offerType);
     
     // Check if you have front and back images, and append them to formData

@@ -52,7 +52,7 @@ const SearchResults = () => {
                         <div className="offer-details">
                             <p><strong>Seller: {offer.seller__username}</strong></p>
                             <p>Card: {offer.card__name}</p>
-                            {offer.auction_start_price && (<p>Auction Price: <strong>${offer.auction_start_price}</strong></p>)}
+                            {offer.auction_current_price && (<p>Auction Price: <strong>${offer.auction_current_price}</strong></p>)}
                             {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
                             <button className="offer-button" onClick={() => handleViewOffer(offer.id)}>View Offer</button>
                         </div>
