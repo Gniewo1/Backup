@@ -15,6 +15,7 @@ const OfferDetails = () => {
     const [newOffer, setNewOffer] = useState('');
 
     useEffect(() => {
+        
         axios.get(`http://localhost:8000/cards/offers/${offerId}/`)
             .then(response => {
                 setOffer(response.data);
@@ -36,15 +37,27 @@ const OfferDetails = () => {
 
     }, [offerId]);
 
+    
 
-    const handleNewOfferSubmit = () => {
-        if (newOffer && parseFloat(newOffer) > offer.auction_price) {
-            // Send the new offer to the backend via API
-            console.log(`New offer submitted: $${newOffer}`);
-            // Optionally reset the field
-            setNewOffer('');
-        } else {
-            alert('Your offer must be higher than the current auction price.');
+    const handleNewOfferSubmit = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.post(
+                `http://localhost:8000/cards/place_offer/${offerId}/`,
+                { offer_price: newOffer },
+                {
+                    headers: {
+                        Authorization: `Token ${token}`, // Include the token for authentication
+                    },
+                }
+            );
+    
+            if (response.status === 200) {
+                alert("Offer placed successfully!");
+            }
+        } catch (error) {
+            console.error(error.response?.data?.error || "An error occurred");
+            alert(error.response?.data?.error || "An error occurred");
         }
     };
 

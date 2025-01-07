@@ -26,7 +26,6 @@ const Profile = () => {
   ///////////////////////////////////////////////////////////////////////////// Fetch current user info
   useEffect(() => {
     const token = localStorage.getItem('token');
-
     const fetchUserInfo = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/user-info/', {

@@ -47,6 +47,7 @@ class UserOffer(models.Model):
     buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_offers')
     offer_price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_winner = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Offer by {self.buyer.username} for {self.card_offer.card.name} - {self.offer_price}"

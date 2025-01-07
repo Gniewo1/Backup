@@ -1,12 +1,15 @@
 from rest_framework import generics
-from .models import Card, CardOffer
+from .models import Card, CardOffer, UserOffer
 from .serializers import CardSerializer, CardOfferSerializer, CardOfferSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.http import JsonResponse, Http404
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import json
+from django.utils.timezone import now
+from decimal import Decimal
 
 class CardListView(generics.ListAPIView):
     queryset = Card.objects.all()
@@ -76,6 +79,55 @@ def offer_details(request, offer_id):
     }
 
     return JsonResponse(data)
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated]) 
+def place_offer(request, offer_id):
+    if request.method == "POST":
+        try:
+            # Parse the incoming JSON data
+            data = json.loads(request.body)
+            offer_price = data.get("offer_price")
+            offer_price = Decimal(offer_price)
+
+            # Get the authenticated user (buyer)
+            buyer = request.user
+
+            # Get the CardOffer object
+            card_offer = CardOffer.objects.get(id=offer_id)
+
+            # Check if auction is active
+            if card_offer.auction_end_date and now() > card_offer.auction_end_date:
+                return JsonResponse({"error": "Auction has already ended."}, status=400)
+
+            # Check if the new offer is greater than the current price
+            if offer_price <= card_offer.auction_current_price:
+                return JsonResponse({"error": "Offer price must be greater than the current auction price."}, status=400)
+
+            # Update the current auction price
+            card_offer.auction_current_price = offer_price
+            card_offer.save()
+
+            # Create a new UserOffer
+            UserOffer.objects.create(
+                card_offer=card_offer,
+                buyer=buyer,
+                offer_price=offer_price,
+            )
+
+            return JsonResponse({"message": "Offer placed successfully."}, status=200)
+
+        except CardOffer.DoesNotExist:
+            return JsonResponse({"error": "Card offer not found."}, status=404)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method."}, status=405)   
+
+
 
 # @api_view(['POST'])
 # def create_card_purchase(request):
