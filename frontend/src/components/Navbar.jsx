@@ -19,6 +19,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const currentPath = window.location.pathname; 
   const [searchQuery, setSearchQuery] = useState('');
+  const [status, setStatus] = useState('');
 
   const handleLogout = async () => {
     const success = await LogOut();
@@ -40,11 +41,24 @@ const Navbar = () => {
     }
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = async (event) => {  // Add async here
     event.preventDefault(); // Prevent form submission
+    try {
+      const response = await fetch(`http://localhost:8000/cards/check-offers/?q=${searchQuery}`);
+      const data = await response.json();
+      
+      if (data.status === 'success') {
+          setStatus('Offers have been updated successfully!');
+      } else {
+          setStatus('Failed to update offers.');
+      }
+    } catch (error) {
+        setStatus('An error occurred.');
+    }
+    
     // Navigate to the search results page with the search query
     navigate(`/search?query=${searchQuery}`);
-  };
+};
 
   useEffect(() => {
 

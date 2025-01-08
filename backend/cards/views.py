@@ -44,13 +44,21 @@ def card_image(request, card_id):
         return JsonResponse(card_data)
     return JsonResponse({'error': 'Card not found'}, status=404)
 
-
+def check_offers(request):
+    query = request.GET.get('q', '')
+    if query:
+        # Filter CardOffer by related Card's name (case-insensitive search)
+        results = CardOffer.objects.filter(card__name__icontains=query, is_active=True)
+        for cardoffer in results:
+            if cardoffer.auction_end_date <= now:
+                cardoffer.is_active = False
 
 def search_offers(request):
     query = request.GET.get('q', '')  # 'q' is the query parameter from the URL
     if query:
         # Filter CardOffer by related Card's name (case-insensitive search)
         results = CardOffer.objects.filter(card__name__icontains=query, is_active=True)
+
     else:
         results = CardOffer.objects.none()
 

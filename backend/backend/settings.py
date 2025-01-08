@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'users',
-    'cards',
-    'rest_framework',
-    'knox',
+    'users', ## myapp
+    'cards', ## myapp
+    'rest_framework',   ## to using with React
+    'knox',  ## login/registration system
+
+    'django_celery_beat', ## Something to do deactivate offers
 ]
 
 REST_FRAMEWORK = {
@@ -155,3 +157,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'glabbaltazar@gmail.com'
 EMAIL_HOST_PASSWORD = 'dubk mwtu cnzt zjlb'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Make sure Redis is installed and running
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TIMEZONE = 'UTC'
