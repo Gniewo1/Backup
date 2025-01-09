@@ -2,14 +2,15 @@
 
 .search-results {
     padding: 20px;
-    max-width: 70%; /* Set max width of the container */
+    max-width: 100%; /* Set max width of the container */
     margin: 0 auto; /* Center the container */
 }
 
+
 .offers-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust min size for responsiveness */
-    gap: 20px;
+    grid-template-columns: repeat(4, 300px); /* 4 columns per row */
+    gap: 50px; /* Adjust the space between items */
 }
 
 .offer-card {
@@ -27,7 +28,7 @@
 .offer-image {
     width: 100%; /* Full width of the card */
     height: auto; /* Maintain aspect ratio */
-    max-height: 220px; /* Set a max height to control the image size */
+    max-height: 280px; /* Set a max height to control the image size */
     object-fit: contain; /* Ensure the image is not cut off */
 }
 
@@ -54,3 +55,41 @@
     padding-top: 25px;
     height: 25px;
   }
+
+  .filter-section {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-section label {
+    font-weight: bold;
+}
+
+.filter-section select {
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+.filter-sort-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.filter-section, .sort-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+label {
+    font-weight: bold;
+}
+
+select {
+    padding: 5px 10px;
+    font-size: 16px;
+}
