@@ -89,7 +89,7 @@ const Profile = () => {
             <h1>Welcome {user.username}</h1>
             {/* <p>Email: {user.email}</p>
             <p>Username: {user.username}</p> */}
-            {isAdmin ? (
+            {/* {isAdmin ? (
               <>
                 <p>You are Admin</p>
               </>
@@ -106,7 +106,7 @@ const Profile = () => {
                 <p>You are not a Verified user.</p>
                 <Verification/>
               </>
-            )}
+            )} */}
           </div>
         )}
         {message && <p>{message}</p>}
@@ -116,7 +116,7 @@ const Profile = () => {
           {offers?.length > 0 ? (
               offers.map(offer => (
                   <div key={offer.id} className="offer">
-                      <img src={offer.front_image} alt={offer.card__name} />
+                      <img src={`http://localhost:8000/media/${offer.front_image}`} alt={offer.card__name} />
                       <h2>{offer.card__name}</h2>
                       <p>Current Price: {offer.auction_current_price}</p>
                       <p>Buy Now Price: {offer.buy_now_price}</p>
