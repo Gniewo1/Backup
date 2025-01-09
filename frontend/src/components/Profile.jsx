@@ -11,7 +11,9 @@ const Profile = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [message, setMessage] = useState('');
   const [loadingUser, setLoadingUser] = useState(true);
+  const [offers, setOffers] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
 
 
@@ -26,6 +28,22 @@ const Profile = () => {
   ///////////////////////////////////////////////////////////////////////////// Fetch current user info
   useEffect(() => {
     const token = localStorage.getItem('token');
+
+    const fetchUserOffers = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/cards/search-useroffers/', {
+            headers: {
+                Authorization: `Token ${token}`  // Include token in headers
+            }
+        });
+        setOffers(response.data.offers);
+    } catch (error) {
+        console.error('Error fetching offers:', error);
+    } finally {
+        setLoading(false);
+    }
+    };
+
     const fetchUserInfo = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/user-info/', {
@@ -52,6 +70,7 @@ const Profile = () => {
     };
 
     fetchUserInfo();
+    fetchUserOffers();
   }, []);
 
 
@@ -92,6 +111,21 @@ const Profile = () => {
         )}
         {message && <p>{message}</p>}
       </div>
+      <div>
+          <h1>Your Offers</h1>
+          {offers?.length > 0 ? (
+              offers.map(offer => (
+                  <div key={offer.id} className="offer">
+                      <img src={offer.front_image} alt={offer.card__name} />
+                      <h2>{offer.card__name}</h2>
+                      <p>Current Price: {offer.auction_current_price}</p>
+                      <p>Buy Now Price: {offer.buy_now_price}</p>
+                  </div>
+              ))
+          ) : (
+              <p>No offers found.</p>
+          )}
+        </div>
     </>
   );
 };

@@ -1,5 +1,6 @@
 from rest_framework import generics
 from .models import Card, CardOffer, UserOffer
+# from users.models import CustomUser
 from .serializers import CardSerializer, CardOfferSerializer, CardOfferSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.http import JsonResponse, Http404
@@ -10,6 +11,7 @@ from rest_framework.views import APIView
 import json
 from django.utils.timezone import now
 from decimal import Decimal
+
 
 class CardListView(generics.ListAPIView):
     queryset = Card.objects.all()
@@ -44,20 +46,34 @@ def card_image(request, card_id):
         return JsonResponse(card_data)
     return JsonResponse({'error': 'Card not found'}, status=404)
 
-def check_offers(request):
-    query = request.GET.get('q', '')
-    if query:
-        # Filter CardOffer by related Card's name (case-insensitive search)
-        results = CardOffer.objects.filter(card__name__icontains=query, is_active=True)
-        for cardoffer in results:
-            if cardoffer.auction_end_date <= now:
-                cardoffer.is_active = False
+# def check_offers(request):
+#     query = request.GET.get('q', '')
+#     if query:
+#         # Filter CardOffer by related Card's name (case-insensitive search)
+#         results = CardOffer.objects.filter(card__name__icontains=query, is_active=True)
+#         for cardoffer in results:
+#             if cardoffer.auction_end_date <= now:
+#                 cardoffer.is_active = False
 
+### Search offers made by certain user
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def search_useroffers(request):
+    user = request.user
+    offers = CardOffer.objects.filter(seller=user)  # Filter offers by the logged-in user
+    data = list(offers.values(
+        'id', 'front_image', 'auction_current_price', 'buy_now_price', 'card__name'
+    ))
+    return JsonResponse({'offers': data})
+
+
+### Search offers with given card name
 def search_offers(request):
     query = request.GET.get('q', '')  # 'q' is the query parameter from the URL
+    time = now()
     if query:
         # Filter CardOffer by related Card's name (case-insensitive search)
-        results = CardOffer.objects.filter(card__name__icontains=query, is_active=True)
+        results = CardOffer.objects.filter(card__name__icontains=query, is_active=True, auction_end_date__gte= time)
 
     else:
         results = CardOffer.objects.none()
