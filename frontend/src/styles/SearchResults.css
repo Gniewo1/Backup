@@ -27,7 +27,7 @@
 .offer-image {
     width: 100%; /* Full width of the card */
     height: auto; /* Maintain aspect ratio */
-    max-height: 120px; /* Set a max height to control the image size */
+    max-height: 220px; /* Set a max height to control the image size */
     object-fit: contain; /* Ensure the image is not cut off */
 }
 

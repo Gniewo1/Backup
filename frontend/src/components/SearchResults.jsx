@@ -21,15 +21,26 @@ const SearchResults = () => {
         if (query) {
             axios.get(`http://localhost:8000/cards/search_offers/?q=${query}`)
                 .then((response) => {
-                    setResults(response.data.results);
-                    setResultCount(response.data.results.length);
-                    
+                    const resultsWithDuration = response.data.results.map((item) => {
+                        // Assuming each item has an `auction_end_date` field
+                        const auctionEndDate = new Date(item.auction_end_date);
+                        const currentDate = new Date();
+                        const duration = auctionEndDate - currentDate;
+
+    
+                        return {
+                            ...item,
+                            duration, // Add the calculated duration to the item
+                        };
+                    });
+    
+                    setResults(resultsWithDuration); // Update state with processed results
+                    setResultCount(resultsWithDuration.length);
                 })
                 .catch((error) => {
                     console.error('Error fetching search results:', error);
                 });
         }
-        
     }, [query]);
 
 
@@ -54,6 +65,8 @@ const SearchResults = () => {
                             <p>Card: {offer.card__name}</p>
                             {offer.auction_current_price && (<p>Auction Price: <strong>${offer.auction_current_price}</strong></p>)}
                             {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
+                            <p><strong>Offer duration: </strong></p>
+                            <p>{Math.floor(offer.duration / (1000 * 60 * 60 * 24))} days, {Math.floor((offer.duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor((offer.duration % (1000 * 60 * 60)) / (1000 * 60))} minutes</p>
                             <button className="offer-button" onClick={() => handleViewOffer(offer.id)}>View Offer</button>
                         </div>
                     </div>

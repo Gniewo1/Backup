@@ -79,7 +79,7 @@ def search_offers(request):
         results = CardOffer.objects.none()
 
     # Convert queryset to a list of dictionaries
-    data = list(results.values('id', 'front_image', 'auction_current_price', 'buy_now_price', 'card__name', 'seller__username'))
+    data = list(results.values('id', 'front_image', 'auction_current_price', 'buy_now_price', 'card__name', 'seller__username', 'auction_end_date'))
 
     return JsonResponse({'results': data})
 

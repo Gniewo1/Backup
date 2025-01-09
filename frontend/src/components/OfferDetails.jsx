@@ -13,7 +13,7 @@ const OfferDetails = () => {
     const [duration, setDuration] = useState(null);
     const navigate = useNavigate();
     const [newOffer, setNewOffer] = useState('');
-    const [sendOffer, setSendOffer] = useState('');
+    // const [sendOffer, setSendOffer] = useState('');
 
     useEffect(() => {
         
