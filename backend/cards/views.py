@@ -46,14 +46,6 @@ def card_image(request, card_id):
         return JsonResponse(card_data)
     return JsonResponse({'error': 'Card not found'}, status=404)
 
-# def check_offers(request):
-#     query = request.GET.get('q', '')
-#     if query:
-#         # Filter CardOffer by related Card's name (case-insensitive search)
-#         results = CardOffer.objects.filter(card__name__icontains=query, is_active=True)
-#         for cardoffer in results:
-#             if cardoffer.auction_end_date <= now:
-#                 cardoffer.is_active = False
 
 ### Search offers made by certain user
 @api_view(['GET'])
@@ -174,15 +166,6 @@ def place_offer(request, offer_id):
     return JsonResponse({"error": "Invalid request method."}, status=405)   
 
 
-
-# @api_view(['POST'])
-# def create_card_purchase(request):
-#     serializer = CardPurchaseSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 @api_view(['PATCH'])
 def update_card_offer_status(request, pk):
     try:
@@ -197,3 +180,24 @@ def update_card_offer_status(request, pk):
     # Serialize and return the updated card offer
     serializer = CardOfferSerializer(card_offer)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+### Is taking 10 newsest offers
+class NewestOffersView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        time = now()
+        newest_offers = CardOffer.objects.filter(is_active=True, auction_end_date__gte= time).order_by('-created_at')[:10]
+        response_data = list(newest_offers.values(
+            'id',
+            'card__name',  # Access related field via double underscore
+            'seller__username',  # Access related field
+            'offer_type',
+            'buy_now_price',
+            # 'auction_start_price',
+            'auction_current_price',
+            'auction_end_date',
+            'front_image',
+            # 'back_image',
+            'created_at',
+        ))
+        return JsonResponse(response_data, safe=False)

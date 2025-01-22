@@ -1,0 +1,18 @@
+.offers-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.offer-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    width: 250px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.offer-card img {
+    width: 100%;
+    border-radius: 4px;
+}
