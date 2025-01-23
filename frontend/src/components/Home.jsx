@@ -43,20 +43,22 @@ const Home = () => {
       <Navbar />
         <div>
             <h2>Newest Offers</h2>
+            <h2>Najnowsze oferty</h2>
             <div className="offers-container">
                 {offers.map(offer => (
                     <div key={offer.id} className="offer-card">
                         <img src={`http://localhost:8000/media/${offer.front_image}`} alt={`${offer.card__name} front`} />
                         <h3>{offer.card__name}</h3>
-                        <p><strong>Seller: {offer.seller__username}</strong></p>
-                        {offer.buy_now_price && <p>Buy Now Price: <strong>${offer.buy_now_price}</strong></p>}
-                        {offer.auction_start_price && <p>Auction Price: <strong>${offer.auction_current_price}</strong></p>}
+                        <p><strong>Sprzedający: {offer.seller__username}</strong></p>
+                        {offer.buy_now_price && <p>Kup teraz: <strong>{offer.buy_now_price} zł</strong></p>}
+                        {offer.auction_current_price && <p>Aukcja: <strong>{offer.auction_current_price} zł</strong></p>}
+                        <p><strong>Czas trwania:</strong></p>
                         <p>
-                                    {Math.floor(offer.duration / (1000 * 60 * 60 * 24))} days, 
-                                    {Math.floor((offer.duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, 
-                                    {Math.floor((offer.duration % (1000 * 60 * 60)) / (1000 * 60))} minutes
+                                    {Math.floor(offer.duration / (1000 * 60 * 60 * 24))} dni, 
+                                    {Math.floor((offer.duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} godzin, 
+                                    {Math.floor((offer.duration % (1000 * 60 * 60)) / (1000 * 60))} minut
                                 </p>
-                                <button className="offer-button" onClick={() => handleViewOffer(offer.id)}>View Offer</button>
+                                <button className="offer-button" onClick={() => handleViewOffer(offer.id)}>Pokaż ofertę</button>
                     </div>
                 ))}
             </div>

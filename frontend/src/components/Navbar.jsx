@@ -114,18 +114,18 @@ const Navbar = () => {
     <>
     <nav className="navbar">
       <div className="navbar-logo">
-        <Link to="/">MyApp</Link>
+        <Link to="/">Trading The Gathering</Link>
       </div>
 
       <form className="navbar-search" onSubmit={handleSearch}>
     <input 
       type="text" 
-      placeholder="Search..." 
+      placeholder="Wyszukaj..." 
       value={searchQuery}
       onChange={handleSearchChange}
     />
 
-    <button type="submit">Search</button>
+    <button type="submit">Wyszukaj</button>
 
     {/* Suggestions */}
     {suggestions.length > 0 && (
@@ -156,7 +156,7 @@ const Navbar = () => {
       
       <ul className="navbar-links">
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/">Główna</Link>
         </li>
         {/* <li>
           <Link to="/about">About</Link>
@@ -168,19 +168,19 @@ const Navbar = () => {
         {isAuthenticated ? (
           <>
             <li>
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile">Profil</Link>
             </li>
               <li> 
-              <button className="btn" onClick={handleLogout}>Logout</button>
+              <button className="btn" onClick={handleLogout}>Wyloguj</button>
             </li> 
           </>
         ) : (
           <>
             <li>
-              <Link to="/login">Login</Link>
+              <Link to="/login">Zaloguj</Link>
             </li>
             <li>
-              <Link to="/register">Register</Link>
+              <Link to="/register">Rejestracja</Link>
             </li>
           </>
         )}

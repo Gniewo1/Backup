@@ -193,11 +193,8 @@ class NewestOffersView(APIView):
             'seller__username',  # Access related field
             'offer_type',
             'buy_now_price',
-            # 'auction_start_price',
             'auction_current_price',
             'auction_end_date',
             'front_image',
-            # 'back_image',
-            'created_at',
         ))
         return JsonResponse(response_data, safe=False)
