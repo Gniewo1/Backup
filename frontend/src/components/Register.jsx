@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from './Navbar'
+import Navbar from './Navbar';
+import '../styles/Login.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -32,40 +33,44 @@ const Register = () => {
     } catch (err) {
       console.error(err.response.data);
     }
-
   };
 
   return (
     <>
-    <Navbar />
-
-    <form onSubmit={onSubmit}>
-      <input
-        type="text"
-        placeholder="Username"
-        name="username"
-        value={username}
-        onChange={onChange}
-        required
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        name="email"
-        value={email}
-        onChange={onChange}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        name="password"
-        value={password}
-        onChange={onChange}
-        required
-      />
-      <button type="submit">Register</button>
-    </form>
+      <Navbar />
+      <div className="login-container">
+        <form className="login-form" onSubmit={onSubmit}>
+          <h2 className="login-title">Rejestracja</h2>
+          <input
+            className="login-input"
+            type="text"
+            placeholder="Nazwa użytkownika"
+            name="username"
+            value={username}
+            onChange={onChange}
+            required
+          />
+          <input
+            className="login-input"
+            type="email"
+            placeholder="E-mail"
+            name="email"
+            value={email}
+            onChange={onChange}
+            required
+          />
+          <input
+            className="login-input"
+            type="password"
+            placeholder="Hasło"
+            name="password"
+            value={password}
+            onChange={onChange}
+            required
+          />
+          <button className="login-button" type="submit">Rejestruj</button>
+        </form>
+      </div>
     </>
   );
 };

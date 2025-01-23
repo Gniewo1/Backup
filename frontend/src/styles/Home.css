@@ -16,3 +16,8 @@
     width: 100%;
     border-radius: 4px;
 }
+
+.empty-container {
+    padding-top: 25px;
+    height: 25px;
+  }

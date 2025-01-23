@@ -42,7 +42,7 @@ const Home = () => {
       <>
       <Navbar />
         <div>
-            <h2>Newest Offers</h2>
+        <div className="empty-container"></div>
             <h2>Najnowsze oferty</h2>
             <div className="offers-container">
                 {offers.map(offer => (

@@ -52,14 +52,11 @@ function App() {
 
   return (
     <>
-
-    
     <Routes>
      <Route path="/" element={<Home/>} />
      <Route path="/navbar" element={<Navbar/>} />
      <Route path="/register" element={isAuthenticated ? <Navigate to="/" /> : <Register/>} />
      <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
-     {/* <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/"/>} /> */}
      <Route path="/profile" element={<Profile />} />
      <Route path="/sell-card" element={<SellCard />} />
      <Route path="/search" element={<SearchResults />} />
