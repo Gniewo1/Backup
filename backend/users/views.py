@@ -3,11 +3,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import RegisterSerializer, TestSerializer, VerificationRequestSerializer, VerifyingUserSerializer
+from .serializers import RegisterSerializer, TestSerializer, VerifyingUserSerializer
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import login
-from .models import TestClass, VerificationRequest, CustomUser, VerificationCode
+from .models import TestClass, CustomUser, VerificationCode
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.core.mail import send_mail
@@ -75,28 +75,28 @@ def get_items(request):
     return Response(serializer.data)
 
 
-class VerificationRequestView(APIView):
-    permission_classes = [IsAuthenticated]
+# class VerificationRequestView(APIView):
+#     permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        # Create a verification request for the authenticated user
-        user = request.user
-        # Check if a request already exists
-        if VerificationRequest.objects.filter(user=user, status='pending').exists():
-            return Response({"detail": "A verification request is already pending."}, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request, *args, **kwargs):
+#         # Create a verification request for the authenticated user
+#         user = request.user
+#         # Check if a request already exists
+#         if VerificationRequest.objects.filter(user=user, status='pending').exists():
+#             return Response({"detail": "A verification request is already pending."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create a new request
-        verification_request = VerificationRequest.objects.create(user=user)
-        serializer = VerificationRequestSerializer(verification_request)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         # Create a new request
+#         verification_request = VerificationRequest.objects.create(user=user)
+#         serializer = VerificationRequestSerializer(verification_request)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-class ShowVerificationRequests(APIView):
-    permission_classes = [IsAdminUser]  # Ensure only admins can access this
+# class ShowVerificationRequests(APIView):
+#     permission_classes = [IsAdminUser]  # Ensure only admins can access this
 
-    def get(self, request, *args, **kwargs):
-        pending_requests = VerificationRequest.objects.filter(status='pending')
-        serializer = VerificationRequestSerializer(pending_requests, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+#     def get(self, request, *args, **kwargs):
+#         pending_requests = VerificationRequest.objects.filter(status='pending')
+#         serializer = VerificationRequestSerializer(pending_requests, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
 @api_view(['PUT'])
@@ -114,18 +114,18 @@ def VerifyingUser(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class VerificationRequestUpdate(viewsets.ModelViewSet):
-    queryset = VerificationRequest.objects.all()
-    serializer_class = VerificationRequestSerializer
+# class VerificationRequestUpdate(viewsets.ModelViewSet):
+#     queryset = VerificationRequest.objects.all()
+#     serializer_class = VerificationRequestSerializer
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)  # Allow partial updates
+#     def update(self, request, *args, **kwargs):
+#         instance = self.get_object()
+#         serializer = self.get_serializer(instance, data=request.data, partial=True)  # Allow partial updates
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['POST'])
 @permission_classes([AllowAny])

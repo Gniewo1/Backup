@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',   ## to using with React
     'knox',  ## login/registration system
 
-    'django_celery_beat', ## Something to do deactivate offers
+    # 'django_celery_beat', ## Something to do deactivate offers
 ]
 
 REST_FRAMEWORK = {
