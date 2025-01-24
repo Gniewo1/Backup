@@ -89,7 +89,7 @@ const SearchResults = () => {
             <Navbar />
             <div className="empty-container"></div>
             <div className="search-results">
-                <h2>Search Results ({filteredResults.length})</h2>
+                <h2>Wyniki wyszukiwania ({filteredResults.length})</h2>
 
                 {/* Filter and Sort Section */}
                 <div className="filter-sort-section">
@@ -104,7 +104,7 @@ const SearchResults = () => {
                     <div className="sort-section">
                         <label htmlFor="offer-sort">Sortuj:</label>
                         <select id="offer-sort" value={sortOption} onChange={handleSortChange}>
-                            <option value="">None</option>
+                            <option value="">Brak sortowania</option>
                             <option value="price_asc">Cena: Rosnąco</option>
                             <option value="price_desc">Cena: Malejąco</option>
                             <option value="duration_asc">Najstarsze</option>
@@ -123,10 +123,10 @@ const SearchResults = () => {
                                 className="offer-image"
                             />
                             <div className="offer-details">
-                                <p><strong>Seller: {offer.seller__username}</strong></p>
-                                <p>Card: {offer.card__name}</p>
-                                {offer.auction_current_price && (<p>Cena Aukcja: <strong>${offer.auction_current_price}</strong></p>)}
-                                {offer.buy_now_price && (<p>Cena Kup Teraz: <strong>${offer.buy_now_price}</strong></p>)}
+                                <p>Sprzedawca: <strong>{offer.seller__username}</strong></p>
+                                <p>Karta: <strong>{offer.card__name}</strong></p>
+                                {offer.auction_current_price && (<p>Cena Aukcja: <strong>{offer.auction_current_price} zł</strong></p>)}
+                                {offer.buy_now_price && (<p>Cena Kup Teraz: <strong>{offer.buy_now_price} zł</strong></p>)}
                                 <p><strong>Czas trwania: </strong></p>
                                 <p>
                                     {Math.floor(offer.duration / (1000 * 60 * 60 * 24))} dni, 
