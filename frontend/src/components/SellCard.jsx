@@ -123,13 +123,13 @@ const CardOffer = () => {
       <div className="empty-container"></div>
 
       <div className="sell-offer-form-container"> 
-      <h1>Sell Card</h1>
+      <h1>Sprzedaj kartę</h1>
 
 
       {/* Search Bar */}
       <input
         type="text"
-        placeholder="Search for a card..."
+        placeholder="Wyszukaj kartę..."
         value={searchTerm}
         onChange={handleSearchChange}
         style={{
@@ -196,7 +196,7 @@ const CardOffer = () => {
          {/* Offer Type Dropdown */}
          <div style={{ marginBottom: "15px" }}>
               <label style={{ display: "block", marginBottom: "5px" }}>
-                Offer Type:
+                Typ oferty:
               </label>
               <select
                 value={offerType}
@@ -209,9 +209,9 @@ const CardOffer = () => {
                   borderRadius: "4px",
                 }}
               >
-                <option value="buy_now">Buy Now</option>
-                <option value="auction">Auction</option>
-                <option value="buy_now_and_auction">Buy Now and Auction</option>
+                <option value="buy_now">Kup Teraz</option>
+                <option value="auction">Aukcja</option>
+                <option value="buy_now_and_auction">Kup Teraz oraz Aukcja</option>
               </select>
             </div>
 
@@ -219,7 +219,7 @@ const CardOffer = () => {
             {/* Conditionally render the price fields */}
         {offerType !== "auction" && (
           <div className="form-group">
-            <label htmlFor="offerPrice">Buy Now Price [€] :</label>
+            <label htmlFor="offerPrice">Cena Kup Teraz [zł] :</label>
             <input
               type="number"
               id="offerPrice"
@@ -233,7 +233,7 @@ const CardOffer = () => {
 
         {offerType !== "buy_now" && (
           <div className="form-group">
-            <label htmlFor="offerPrice">Auction Price [€] :</label>
+            <label htmlFor="offerPrice">Cena Aukcji [zł] :</label>
             <input
               type="number"
               id="auctionPrice"
@@ -247,7 +247,7 @@ const CardOffer = () => {
 
 
           <div className="form-group">
-            <label htmlFor="frontImage">Front Image:</label>
+            <label htmlFor="frontImage">Przód karty:</label>
             <input
               type="file"
               id="frontImage"
@@ -257,7 +257,7 @@ const CardOffer = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="backImage">Back Image:</label>
+            <label htmlFor="backImage">Tył karty:</label>
             <input
               type="file"
               id="backImage"
@@ -267,7 +267,7 @@ const CardOffer = () => {
             />
           </div>
           <form onSubmit={handleSubmit}>
-        <button type="submit" className="btn-submit">Submit Offer</button>
+        <button type="submit" className="btn-submit">Dodaj ofertę</button>
       </form>
     </div>
     </>

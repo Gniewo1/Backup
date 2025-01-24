@@ -94,21 +94,21 @@ const SearchResults = () => {
                 {/* Filter and Sort Section */}
                 <div className="filter-sort-section">
                     <div className="filter-section">
-                        <label htmlFor="offer-filter">Filter by Offer Type:</label>
+                        <label htmlFor="offer-filter">Filtruj typ oferty:</label>
                         <select id="offer-filter" value={filter} onChange={handleFilterChange}>
-                            <option value="all">All</option>
-                            <option value="buy_now">Buy Now</option>
-                            <option value="auction">Auction</option>
+                            <option value="all">Wszystko</option>
+                            <option value="buy_now">Kup Teraz</option>
+                            <option value="auction">Aukcja</option>
                         </select>
                     </div>
                     <div className="sort-section">
-                        <label htmlFor="offer-sort">Sort by:</label>
+                        <label htmlFor="offer-sort">Sortuj:</label>
                         <select id="offer-sort" value={sortOption} onChange={handleSortChange}>
                             <option value="">None</option>
-                            <option value="price_asc">Price: Ascending</option>
-                            <option value="price_desc">Price: Descending</option>
-                            <option value="duration_asc">Duration: Oldest</option>
-                            <option value="duration_desc">Duration: Newest</option>
+                            <option value="price_asc">Cena: Rosnąco</option>
+                            <option value="price_desc">Cena: Malejąco</option>
+                            <option value="duration_asc">Najstarsze</option>
+                            <option value="duration_desc">Najnowsze</option>
                         </select>
                     </div>
                 </div>
@@ -125,15 +125,15 @@ const SearchResults = () => {
                             <div className="offer-details">
                                 <p><strong>Seller: {offer.seller__username}</strong></p>
                                 <p>Card: {offer.card__name}</p>
-                                {offer.auction_current_price && (<p>Auction Price: <strong>${offer.auction_current_price}</strong></p>)}
-                                {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
-                                <p><strong>Offer duration: </strong></p>
+                                {offer.auction_current_price && (<p>Cena Aukcja: <strong>${offer.auction_current_price}</strong></p>)}
+                                {offer.buy_now_price && (<p>Cena Kup Teraz: <strong>${offer.buy_now_price}</strong></p>)}
+                                <p><strong>Czas trwania: </strong></p>
                                 <p>
-                                    {Math.floor(offer.duration / (1000 * 60 * 60 * 24))} days, 
-                                    {Math.floor((offer.duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, 
-                                    {Math.floor((offer.duration % (1000 * 60 * 60)) / (1000 * 60))} minutes
+                                    {Math.floor(offer.duration / (1000 * 60 * 60 * 24))} dni, 
+                                    {Math.floor((offer.duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} godzin, 
+                                    {Math.floor((offer.duration % (1000 * 60 * 60)) / (1000 * 60))} minut
                                 </p>
-                                <button className="offer-button" onClick={() => handleViewOffer(offer.id)}>View Offer</button>
+                                <button className="offer-button" onClick={() => handleViewOffer(offer.id)}>Pokaż ofertę</button>
                             </div>
                         </div>
                     ))}
