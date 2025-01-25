@@ -1,28 +1,30 @@
 /* Flex container for profile */
 .profile-container {
-  display: flex;
-  gap: 400px;  /* Increased space between columns */
+  display: flex; /* Use flexbox for side-by-side layout */
+  justify-content: space-between; /* Make space between the columns */
+  gap: 400px; /* Space between columns */
   padding: 20px;
-  align-items: flex-start; /* Align columns at the top */
+  align-items: flex-start; /* Align the columns at the top */
 }
 
 /* Common styling for both offers sections */
-.offers-container {
-  flex: 1;
+.offers-container-profile,
+.offers-container.active-offers {
+  flex: 1; /* Both columns will have equal width */
   display: flex;
   flex-direction: column;
   padding: 10px;
   background-color: #f4f4f4;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  /* Add height auto to prevent stretching to equal size */
-  height: auto;
+  height: auto; /* Allow content to define height */
 }
 
 /* Inactive or Past-Time Offers Section - Left Column */
 .offers-container h1 {
   font-size: 1.5rem;
   margin-bottom: 10px;
+  text-align: center; /* Center the title above the offers */
 }
 
 /* Individual offer card styling */
@@ -43,4 +45,31 @@
 .offer p {
   font-size: 0.9rem;
   color: #555;
+}
+
+/* Empty container for spacing */
+.empty-container {
+  padding-top: 25px;
+  height: 45px;
+}
+
+/* Button styling */
+.sell-card-button {
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px; /* Add space below the button */
+  display: block; /* Make button block to center it */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Button hover effect */
+.sell-card-button:hover {
+  background-color: darkblue;
 }

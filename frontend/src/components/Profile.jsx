@@ -79,13 +79,27 @@ const Profile = () => {
       offer.is_active && new Date(offer.auction_end_date) >= now
   );
 
+  if (loadingUser) {
+    return <p>Loading user information...</p>; // Add a loading state
+  }
+
+  if (!user) {
+    return <p>User data not found. Please log in again.</p>; // Handle case where user data is not available
+  }
+
   return (
     <>
       <Navbar />
       <div className="empty-container"></div>
-      <div className="profile-container">
+      <h1>Witaj {user.username}</h1>
+      {(isAdmin || isVerified) && (
+        <button onClick={handleClick} className="sell-card-button">
+          Sell Card
+        </button>
+      )}
+      <div className="offers-container profile-container">
         {/* Left Side: Inactive or Past-Time Offers */}
-        <div className="offers-container">
+        <div className="offers-container-profile">
           <h1>Inactive or Past-Time Offers</h1>
           {inactiveOffers.length > 0 ? (
             inactiveOffers.map((offer) => (
@@ -104,7 +118,7 @@ const Profile = () => {
             <p>No inactive or past-time offers found.</p>
           )}
         </div>
-
+  
         {/* Right Side: Active Offers */}
         <div className="offers-container active-offers">
           <h1>Active Offers</h1>
