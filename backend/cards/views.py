@@ -54,7 +54,7 @@ def search_useroffers(request):
     user = request.user
     offers = CardOffer.objects.filter(seller=user)  # Filter offers by the logged-in user
     data = list(offers.values(
-        'id', 'front_image', 'auction_current_price', 'buy_now_price', 'card__name'
+        'id', 'front_image', 'auction_current_price', 'buy_now_price', 'card__name', 'auction_end_date', 'is_active'
     ))
     return JsonResponse({'offers': data})
 

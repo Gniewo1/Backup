@@ -1,0 +1,46 @@
+/* Flex container for profile */
+.profile-container {
+  display: flex;
+  gap: 400px;  /* Increased space between columns */
+  padding: 20px;
+  align-items: flex-start; /* Align columns at the top */
+}
+
+/* Common styling for both offers sections */
+.offers-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Add height auto to prevent stretching to equal size */
+  height: auto;
+}
+
+/* Inactive or Past-Time Offers Section - Left Column */
+.offers-container h1 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+/* Individual offer card styling */
+.offer {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+}
+
+.offer img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.offer p {
+  font-size: 0.9rem;
+  color: #555;
+}
