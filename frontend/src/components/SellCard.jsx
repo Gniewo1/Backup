@@ -14,6 +14,7 @@ const CardOffer = () => {
   const [auctionPrice, setAuctionPrice] = useState(''); // Set price of auction
   const [frontImage, setFrontImage] = useState(null); // State for front image
   const [backImage, setBackImage] = useState(null);  // State for back image
+  const [bankAccount, setBankAccount] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState('');
@@ -85,6 +86,7 @@ const CardOffer = () => {
     formData.append('auction_start_price', auctionPrice);
     formData.append('auction_current_price', auctionPrice);
     formData.append('offer_type', offerType);
+    formData.append('bank_account_number', bankAccount);
     
     // Check if you have front and back images, and append them to formData
     if (frontImage) formData.append('front_image', frontImage);
@@ -244,6 +246,18 @@ const CardOffer = () => {
             />
           </div>
         )}
+
+        <div className="form-group">
+                  <label htmlFor="bankAccount">Numer konta bankowego:</label>
+                  <input
+                    type="text"
+                    id="bankAccount"
+                    value={bankAccount}
+                    onChange={(e) => setBankAccount(e.target.value)}
+                    required
+                    className="form-input"
+                  />
+                </div>
 
 
           <div className="form-group">

@@ -7,23 +7,21 @@ import '../styles/OfferDetails.css';
 import { CheckAuthentication } from '../functions/CheckAuthentication';
 
 const OfferDetails = () => {
-    const { offerId } = useParams();  // Get the offerId from the URL params
+    const { offerId } = useParams();
     const [offer, setOffer] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [duration, setDuration] = useState(null);
     const navigate = useNavigate();
     const [newOffer, setNewOffer] = useState('');
-    // const [sendOffer, setSendOffer] = useState('');
+    const [isFrontImage, setIsFrontImage] = useState(true); // Track image state
 
     useEffect(() => {
-        
         axios.get(`http://localhost:8000/cards/offers/${offerId}/`)
             .then(response => {
                 setOffer(response.data);
                 const auctionEndDate = new Date(response.data.auction_end_date);
                 const currentDate = new Date();
-                setDuration(auctionEndDate-currentDate);
-
+                setDuration(auctionEndDate - currentDate);
             })
             .catch(error => {
                 console.error('Error fetching offer details:', error);
@@ -32,13 +30,10 @@ const OfferDetails = () => {
         const verifyAuthentication = async () => {
             const authenticated = await CheckAuthentication();
             setIsAuthenticated(authenticated);
-            };
-          
-            verifyAuthentication();
+        };
 
+        verifyAuthentication();
     }, [offerId]);
-
-    
 
     const handleAuction = async (type) => {
         try {
@@ -53,11 +48,11 @@ const OfferDetails = () => {
                 { offer_price: offerPriceToSend, offer_type: offerType },
                 {
                     headers: {
-                        Authorization: `Token ${token}`, // Include the token for authentication
+                        Authorization: `Token ${token}`,
                     },
                 }
             );
-    
+
             if (response.status === 200) {
                 alert("Offer placed successfully!");
             }
@@ -67,85 +62,84 @@ const OfferDetails = () => {
         }
     };
 
-
-        const handleClickBuy = () => {
-            if (isAuthenticated) {
-                // setSendOffer(offer.buy_now_price);
-                handleAuction('buy_now');  // Trigger the buy function if authenticated
-            } else {
-                navigate('/login');  // Redirect to home page if not authenticated
-            }
-        };
-
-        // const handleBuy = () => {
-        //     if (isAuthenticated) {
-        //         handleAuction('buy_now');
-        //     }
-        // };
-
-        const handleClickAuction = () => {
-            if (isAuthenticated) {
-                // setSendOffer(newOffer);
-                handleAuction('auction');
-            }
-        };
-
-        if (!offer) {
-            return <p>Loading...</p>;  // Show a loading message while the data is fetched
+    const handleClickBuy = () => {
+        if (isAuthenticated) {
+            handleAuction('buy_now');
+        } else {
+            navigate('/login');
         }
+    };
 
-        return (
-            <>
-                <Navbar />
-                <div className="offer-detail">
-                    <div className="offer-container">
-                        {/* Left side */}
-                        <div className="offer-left">
-                            <h1>{offer.card_name}</h1>
-                            <img src={`http://localhost:8000/${offer.card_image}`} alt={offer.card_name} />
-                        </div>
-                        
-                        {/* Right side */}
-                        <div className="offer-right">
-                            <p>Offered by: <strong>{offer.user}</strong></p>
-                            {offer.auction_price && (<p>Auction Price: <strong>${offer.auction_price}</strong></p>)}
+    const handleClickAuction = () => {
+        if (isAuthenticated) {
+            handleAuction('auction');
+        }
+    };
 
-                            {/* New Offer Field */}
-                            {offer.auction_price && (
-                                <div className="new-offer-section">
-                                    <input 
-                                        type="number" 
-                                        id="new-offer" 
-                                        placeholder="Enter your offer" 
-                                        value={newOffer}
-                                        onChange={(e) => setNewOffer(e.target.value)} 
-                                    />
-                                    <button 
-                                        onClick={handleClickAuction} 
-                                        className="offer-button"
-                                    >
-                                        Give New Offer
-                                    </button>
-                                </div>
-                            )}
+    const toggleImage = () => {
+        setIsFrontImage(!isFrontImage); // Toggle the image state
+    };
 
-                            {offer.buy_now_price && (<p>Buy now Price: <strong>${offer.buy_now_price}</strong></p>)}
-                            
+    if (!offer) {
+        return <p>Loading...</p>;
+    }
 
-        
-                            <button 
-                                onClick={handleClickBuy} 
-                                className={"offer-button"}
-                            >
-                                {isAuthenticated ? 'Buy Now' : 'Log in to Buy'}
-                            </button>
-                            <p><strong>Offer duration: </strong></p>
-                            <p>{Math.floor(duration / (1000 * 60 * 60 * 24))} days, {Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))} minutes</p>
-                        </div>
+    return (
+        <>
+            <Navbar />
+            <div className="offer-detail">
+                <div className="offer-container">
+                    {/* Left side */}
+                    <div className="offer-left">
+                        <h1>{offer.card_name}</h1>
+                        <img
+                            src={`http://localhost:8000/${isFrontImage ? offer.card_image : offer.card_image_back}`}
+                            alt={offer.card_name}
+                        />
+                        <button onClick={toggleImage} className="toggle-image-button">
+                            {isFrontImage ? 'Pokaż Tył' : 'Pokaż Przód'}
+                        </button>
+                    </div>
+
+                    {/* Right side */}
+                    <div className="offer-right">
+                        <p>Sprzedawca: <strong>{offer.user}</strong></p>
+                        {offer.auction_price && (<p>Aukcja Cena: <strong>{offer.auction_price} zł</strong></p>)}
+
+                        {/* New Offer Field */}
+                        {offer.auction_price && (
+                            <div className="new-offer-section">
+                                <input
+                                    type="number"
+                                    id="new-offer"
+                                    placeholder="Wprowadź ofertę"
+                                    value={newOffer}
+                                    onChange={(e) => setNewOffer(e.target.value)}
+                                />
+                                <button
+                                    onClick={handleClickAuction}
+                                    className="offer-button"
+                                >
+                                    Dodaj swoją ofertę
+                                </button>
+                            </div>
+                        )}
+
+                        {offer.buy_now_price && (<p>Kup Teraz Cena: <strong>{offer.buy_now_price} zł</strong></p>)}
+
+                        <button
+                            onClick={handleClickBuy}
+                            className={"offer-button"}
+                        >
+                            {isAuthenticated ? 'Kup Teraz' : 'Zaloguj się, żeby kupić'}
+                        </button>
+                        <p><strong>Czas trwania: </strong></p>
+                        <p>{Math.floor(duration / (1000 * 60 * 60 * 24))} dni, {Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} godziny, {Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60))} minut</p>
                     </div>
                 </div>
-            </>
-        );
+            </div>
+        </>
+    );
 };
 
 export default OfferDetails;

@@ -68,3 +68,18 @@
 .new-offer-section button:hover {
     background-color: #218838;
 }
+
+.toggle-image-button {
+    background-color: #333; /* Black background */
+    color: white; /* White text */
+    border: none; /* Remove default border */
+    padding: 10px 20px; /* Add some padding */
+    border-radius: 5px; /* Slightly rounded corners */
+    font-size: 16px; /* Adjust font size */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.toggle-image-button:hover {
+    background-color: #555; /* Slightly lighter black on hover */
+}

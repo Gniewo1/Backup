@@ -87,6 +87,7 @@ def offer_details(request, offer_id):
         'user': offer.seller.username,
         'card_name': offer.card.name,
         'card_image': offer.front_image.url if offer.front_image else None,  # Assuming 'image' is a File/ImageField
+        'card_image_back': offer.back_image.url if offer.back_image else None,
         'auction_price': offer.auction_current_price,
         'buy_now_price': offer.buy_now_price,
         'created_at': offer.created_at,

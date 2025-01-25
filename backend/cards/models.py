@@ -24,7 +24,7 @@ class CardOffer(models.Model):
         ('buy_now_and_auction', 'Buy Now and Auction'),
     ]
 
-    card = models.ForeignKey(Card,on_delete=models.CASCADE, related_name='offers')
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='offers')
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     offer_type = models.CharField(max_length=20, choices=OFFER_TYPES)
     buy_now_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -33,6 +33,7 @@ class CardOffer(models.Model):
     auction_end_date = models.DateTimeField(default=now() + timedelta(weeks=2), null=True, blank=True)
     front_image = models.ImageField(upload_to='card_offer_images/', null=True, blank=True)
     back_image = models.ImageField(upload_to='card_offer_images/', null=True, blank=True)
+    bank_account_number = models.CharField(max_length=34)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
