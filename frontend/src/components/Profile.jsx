@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Navbar from './Navbar';
 import '../styles/Home.css';
@@ -7,6 +8,12 @@ const Profile = () => {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleViewOffer = (offerId) => {
+    // Navigate to the offer's specific page
+    navigate(`/sold/${offerId}`);
+};
 
   useEffect(() => {
     const fetchWinningOffers = async () => {
@@ -62,7 +69,7 @@ const Profile = () => {
 
                 {/* Button for each offer */}
                 <button className="offer-button"
-                  onClick={() => alert('Button clicked for offer ' + offer.card.name)}  // You can replace this with an actual action
+                  onClick={() => handleViewOffer(offer.id)}  // You can replace this with an actual action
                 >
                   Podaj dane
                 </button>

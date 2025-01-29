@@ -268,6 +268,7 @@ def offer_sold(request, offer_id):
         'created_at': offer.created_at,
         'auction_end_date': offer.auction_end_date,
         'is_active': offer.is_active,
+        'bank_number':offer.bank_account_number,
     }
 
     return JsonResponse(data)

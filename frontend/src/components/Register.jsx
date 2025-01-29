@@ -29,7 +29,11 @@ const Register = () => {
     try {
       const res = await axios.post('http://localhost:8000/api/register/', body, config);
       console.log('Registration Successful:', res.data);
-      navigate('/');
+      if (res.status === 200) {
+                alert("Twoje konto zostało założone. Kod weryfikacyjny został wysłany na podany adres e-mail");
+                navigate('/');
+        }
+      
     } catch (err) {
       console.error(err.response.data);
     }
