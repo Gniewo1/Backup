@@ -1,143 +1,75 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Navbar from './Navbar';
-// import Verification from './Verification';
-import axios from 'axios';
-import '../styles/Profile.css';
-import { useNavigate } from 'react-router-dom';
+import '../styles/Home.css';
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const [message, setMessage] = useState('');
-  const [loadingUser, setLoadingUser] = useState(true);
   const [offers, setOffers] = useState([]);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Redirect to sell-card page
-  const handleClick = () => {
-    navigate('/sell-card');
-  };
-
-  // Fetch current user info and offers
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    const fetchUserOffers = async () => {
+    const fetchWinningOffers = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/cards/search-useroffers/', {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:8000/cards/expired-offers/', {
+          headers: { 'Authorization': `Token ${token}`, },
         });
-        setOffers(response.data.offers);
-      } catch (error) {
-        console.error('Error fetching offers:', error);
+        setOffers(response.data);
+        console.log(response.data); // For debugging
+      } catch (err) {
+        setError("Error fetching offers");
       } finally {
         setLoading(false);
       }
     };
 
-    const fetchUserInfo = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/user-info/', {
-          method: 'GET',
-          headers: {
-            Authorization: `Token ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.status === 401) {
-          throw new Error('Unauthorized');
-        }
-
-        const data = await response.json();
-        setUser(data);
-        setIsAdmin(data.is_admin);
-        setIsVerified(data.is_verified);
-      } catch (error) {
-        console.error('Error fetching user info:', error);
-      } finally {
-        setLoadingUser(false);
-      }
-    };
-
-    fetchUserInfo();
-    fetchUserOffers();
+    fetchWinningOffers();
   }, []);
 
-  // Separate offers into active and inactive/past
-  const now = new Date();
-  const inactiveOffers = offers.filter(
-    (offer) =>
-      !offer.is_active || new Date(offer.auction_end_date) < now
-  );
-  const activeOffers = offers.filter(
-    (offer) =>
-      offer.is_active && new Date(offer.auction_end_date) >= now
-  );
-
-  if (loadingUser) {
-    return <p>Loading user information...</p>; // Add a loading state
-  }
-
-  if (!user) {
-    return <p>User data not found. Please log in again.</p>; // Handle case where user data is not available
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <>
       <Navbar />
-      <div className="empty-container"></div>
-      <h1>Witaj {user.username}</h1>
-      {(isAdmin || isVerified) && (
-        <button onClick={handleClick} className="sell-card-button">
-          Sell Card
-        </button>
-      )}
-      <div className="offers-container profile-container">
-        {/* Left Side: Inactive or Past-Time Offers */}
-        <div className="offers-container-profile">
-          <h1>Inactive or Past-Time Offers</h1>
-          {inactiveOffers.length > 0 ? (
-            inactiveOffers.map((offer) => (
-              <div key={offer.id} className="offer">
-                <h2>{offer.card__name}</h2>
-                <img
-                  src={`http://localhost:8000/media/${offer.front_image}`}
-                  alt={offer.card__name}
-                  className="offer-image"
-                />
-                <p>Auction End Date: {new Date(offer.auction_end_date).toLocaleString()}</p>
-                <p>Buy Now Price: {offer.buy_now_price}</p>
+      <div className="flex gap-4 mb-4">
+        <button>Aktywne oferty</button>
+        <button>Zakończone oferty</button>
+        <button>Historia</button>
+      </div>
+      <div className="container mx-auto p-6">
+        <h2 className="text-xl font-bold mb-4">Wygrane aukcje</h2>
+        <div className="offers-container">
+          {offers.length > 0 ? (
+            offers.map((offer) => (
+              <div key={offer.id} className="offer-card">
+                {/* Displaying the image */}
+                {offer.card && offer.card.image && (
+                  <img 
+                    src={`http://localhost:8000/${offer.front_image}`}
+                    alt={offer.card.name} 
+                    className="w-full h-48 object-cover mb-4 rounded"
+                  />
+                )}
+                
+                {/* Displaying the card name and auction price */}
+                <h3 className="text-lg font-semibold">{offer.card.name}</h3>
+                <p className="text-gray-600">Cena końcowa: {offer.auction_current_price} PLN</p>
+                <p className="text-gray-600">Sprzedał: {offer.seller_username}</p>
+                <p className="text-gray-600">Konto do przelewu: {offer.bank_account_number}</p>
+                
+
+                {/* Button for each offer */}
+                <button className="offer-button"
+                  onClick={() => alert('Button clicked for offer ' + offer.card.name)}  // You can replace this with an actual action
+                >
+                  Podaj dane
+                </button>
               </div>
             ))
           ) : (
-            <p>No inactive or past-time offers found.</p>
-          )}
-        </div>
-  
-        {/* Right Side: Active Offers */}
-        <div className="offers-container active-offers">
-          <h1>Active Offers</h1>
-          {activeOffers.length > 0 ? (
-            activeOffers.map((offer) => (
-              <div key={offer.id} className="offer">
-                <h2>{offer.card__name}</h2>
-                <img
-                  src={`http://localhost:8000/media/${offer.front_image}`}
-                  alt={offer.card__name}
-                  className="offer-image"
-                />
-                <p>Current Price: {offer.auction_current_price}</p>
-                <p>Auction End Date: {new Date(offer.auction_end_date).toLocaleString()}</p>
-                <p>Buy Now Price: {offer.buy_now_price}</p>
-              </div>
-            ))
-          ) : (
-            <p>No active offers found.</p>
+            <p>No winning offers found.</p>
           )}
         </div>
       </div>

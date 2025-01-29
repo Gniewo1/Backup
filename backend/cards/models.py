@@ -5,6 +5,7 @@ from datetime import timedelta
 from django.utils.timezone import now
 
 
+
 # Create your models here.
 
 class Card(models.Model):

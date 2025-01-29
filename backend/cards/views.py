@@ -1,7 +1,7 @@
 from rest_framework import generics
 from .models import Card, CardOffer, UserOffer
 # from users.models import CustomUser
-from .serializers import CardSerializer, CardOfferSerializer, CardOfferSerializer
+from .serializers import CardSerializer, CardOfferSerializer, CardOfferSerializer, CardWinOfferSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.http import JsonResponse, Http404
 from rest_framework.decorators import api_view, permission_classes
@@ -11,6 +11,9 @@ from rest_framework.views import APIView
 import json
 from django.utils.timezone import now
 from decimal import Decimal
+from django.db.models import Max
+
+
 
 
 class CardListView(generics.ListAPIView):
@@ -199,3 +202,72 @@ class NewestOffersView(APIView):
             'front_image',
         ))
         return JsonResponse(response_data, safe=False)
+    
+# # class WinOffers
+# def win_offers(user):
+#     # Subquery to get the highest offer for each expired or inactive CardOffer
+#     highest_offers = UserOffer.objects.filter(
+#         card_offer=OuterRef('pk')
+#     ).order_by('-offer_price').values('offer_price')[:1]
+
+#     # Get all expired or inactive offers where the user has the highest bid
+#     user_winning_offers = UserOffer.objects.filter(
+#         buyer=user,
+#         card_offer__is_active=False
+#     ).annotate(
+#         max_price=Subquery(highest_offers)
+#     ).filter(offer_price=F('max_price'))
+
+#     return user_winning_offers
+
+class ExpiredOrInactiveOffersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        print(request.user)
+        user = request.user  # Pobranie aktualnie zalogowanego użytkownika
+
+        # Pobranie ofert, które są nieaktywne lub ich czas się skończył
+        expired_or_inactive_offers = CardOffer.objects.filter(
+            is_active=False
+        ) | CardOffer.objects.filter(
+            auction_end_date__lt=now()
+        )
+        print("test")
+
+        # Pobranie ofert, gdzie ostatnia oferta została złożona przez użytkownika
+        user_last_offers = UserOffer.objects.filter(
+            buyer=user
+        ).values('card_offer').annotate(last_offer_time=Max('created_at'))
+
+        # Pobranie ID ofert, które spełniają ostatni warunek
+        user_offer_ids = [offer['card_offer'] for offer in user_last_offers]
+
+        # Filtrowanie, by spełnić wszystkie warunki
+        filtered_offers = expired_or_inactive_offers.filter(id__in=user_offer_ids)
+
+        # Serializacja wyników
+        serializer = CardWinOfferSerializer(filtered_offers, many=True)
+        return Response(serializer.data)
+    
+def offer_sold(request, offer_id):
+    try:
+        offer = CardOffer.objects.get(id=offer_id)  # Get the offer by ID, and ensure it's active
+    except CardOffer.DoesNotExist:
+        raise Http404("Offer not found")
+
+    # Prepare the offer data for response
+    data = {
+        'id': offer.id,
+        'user': offer.seller.username,
+        'card_name': offer.card.name,
+        'card_image': offer.front_image.url if offer.front_image else None,  # Assuming 'image' is a File/ImageField
+        'card_image_back': offer.back_image.url if offer.back_image else None,
+        'auction_price': offer.auction_current_price,
+        'buy_now_price': offer.buy_now_price,
+        'created_at': offer.created_at,
+        'auction_end_date': offer.auction_end_date,
+        'is_active': offer.is_active,
+    }
+
+    return JsonResponse(data)

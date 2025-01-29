@@ -62,7 +62,7 @@ function App() {
      <Route path="/search" element={<SearchResults />} />
      <Route path="/buy-card/:offerId" element={<CardPurchaseForm />} />
      <Route path="/offers/:offerId" element={<OfferDetails />} />
-     <Route path="/test" element={<Test />} />
+     <Route path="/test/:offerId" element={<Test />} />
      <Route path="/verification" element={<Verification />} />
     </Routes>
     </>

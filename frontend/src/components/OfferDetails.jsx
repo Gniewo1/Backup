@@ -44,7 +44,7 @@ const OfferDetails = () => {
                 offerPriceToSend = offer.buy_now_price; // Override for buy_now
             }
             const response = await axios.post(
-                `http://localhost:8000/cards/place_offer/${offerId}/`,
+                `http://localhost:8000/cards/place-offer/${offerId}/`,
                 { offer_price: offerPriceToSend, offer_type: offerType },
                 {
                     headers: {
