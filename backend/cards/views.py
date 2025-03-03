@@ -1,7 +1,7 @@
 from rest_framework import generics
-from .models import Card, CardOffer, UserOffer
+from .models import Card, CardOffer, UserOffer, ShippingData
 # from users.models import CustomUser
-from .serializers import CardSerializer, CardOfferSerializer, CardOfferSerializer, CardWinOfferSerializer
+from .serializers import CardSerializer, CardOfferSerializer, CardOfferSerializer, CardWinOfferSerializer, ShippingDataSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.http import JsonResponse, Http404
 from rest_framework.decorators import api_view, permission_classes
@@ -272,3 +272,24 @@ def offer_sold(request, offer_id):
     }
 
     return JsonResponse(data)
+
+
+class DeliveryDataView(APIView):
+    permission_classes = [IsAuthenticated]  # Ensure only authenticated users can post
+
+    def post(self, request, offer_id):
+        try:
+            offer = CardOffer.objects.get(id=offer_id)
+            if ShippingData.objects.filter(card_offer=offer).exists():
+                return Response({"error": "Offer already have delivery adress"}, status=status.HTTP_404_NOT_FOUND)
+        except CardOffer.DoesNotExist:
+            return Response({"error": "Offer not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ShippingDataSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(card_offer=offer)  # Associate shipping data with the offer
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        print("Received Data:", request.data)  # Debugging
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -11,11 +11,14 @@ const Test = () => {
     const [offer, setOffer] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [shippingInfo, setShippingInfo] = useState({
-        shipping_name: '',
-        shipping_address: '',
-        shipping_city: '',
-        shipping_postal_code: '',
-        shipping_country: ''
+        name: '',
+        surname: '',
+        street: '',
+        house_number: '',
+        apartment_number: '',
+        city: '',
+        zip_code: '',
+
     });
     const navigate = useNavigate();
     const [isFrontImage, setIsFrontImage] = useState(true); // Track image state
@@ -24,7 +27,6 @@ const Test = () => {
         axios.get(`http://localhost:8000/cards/offer-sold/${offerId}/`)
             .then(response => {
                 setOffer(response.data);
-                console.log(response.data);
             })
             .catch(error => {
                 console.error('Error fetching offer details:', error);
@@ -51,11 +53,11 @@ const Test = () => {
             try {
                 const token = localStorage.getItem('token');
                 const response = await axios.post(
-                    `http://localhost:8000/cards/submit-shipping/${offerId}/`,
+                    `http://localhost:8000/cards/delivery-data/${offerId}/`,
                     shippingInfo,
                     {
                         headers: {
-                            Authorization: `Token ${token}`,
+                            'Authorization': `Token ${token}`,
                         },
                     }
                 );
@@ -107,23 +109,56 @@ const Test = () => {
                             <h3>Wymagane dane do wysyłki</h3>
                             <form onSubmit={handleSubmitShipping}>
                                 <div>
-                                    <label htmlFor="shipping_name">Imię i Nazwisko</label>
+                                    <label htmlFor="shipping_name">Imię</label>
                                     <input
                                         type="text"
                                         id="shipping_name"
-                                        name="shipping_name"
-                                        value={shippingInfo.shipping_name}
+                                        name="name"
+                                        value={shippingInfo.name}
                                         onChange={handleShippingChange}
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="shipping_address">Adres</label>
+                                    <label htmlFor="shipping_surname">Nazwisko</label>
                                     <input
                                         type="text"
-                                        id="shipping_address"
-                                        name="shipping_address"
-                                        value={shippingInfo.shipping_address}
+                                        id="shipping_surname"
+                                        name="surname"
+                                        value={shippingInfo.surname}
+                                        onChange={handleShippingChange}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="shipping_street">Ulica</label>
+                                    <input
+                                        type="text"
+                                        id="shipping_street"
+                                        name="street"
+                                        value={shippingInfo.street}
+                                        onChange={handleShippingChange}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="shipping_house_number">Numer budynku</label>
+                                    <input
+                                        type="text"
+                                        id="shipping_house_number"
+                                        name="house_number"
+                                        value={shippingInfo.house_number}
+                                        onChange={handleShippingChange}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="shipping_apartment_number">Numer mieszkania</label>
+                                    <input
+                                        type="text"
+                                        id="shipping_apartment_number"
+                                        name="apartment_number"
+                                        value={shippingInfo.apartment_number}
                                         onChange={handleShippingChange}
                                         required
                                     />
@@ -133,30 +168,19 @@ const Test = () => {
                                     <input
                                         type="text"
                                         id="shipping_city"
-                                        name="shipping_city"
-                                        value={shippingInfo.shipping_city}
+                                        name="city"
+                                        value={shippingInfo.city}
                                         onChange={handleShippingChange}
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="shipping_postal_code">Kod pocztowy</label>
+                                    <label htmlFor="shipping_zip_code">Kod pocztowy</label>
                                     <input
                                         type="text"
-                                        id="shipping_postal_code"
-                                        name="shipping_postal_code"
-                                        value={shippingInfo.shipping_postal_code}
-                                        onChange={handleShippingChange}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="shipping_country">Kraj</label>
-                                    <input
-                                        type="text"
-                                        id="shipping_country"
-                                        name="shipping_country"
-                                        value={shippingInfo.shipping_country}
+                                        id="shipping_zip_code"
+                                        name="zip_code"
+                                        value={shippingInfo.zip_code}
                                         onChange={handleShippingChange}
                                         required
                                     />

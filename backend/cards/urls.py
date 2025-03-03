@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CardListView, CardOfferCreateView, search_offers, offer_details, offer_sold, update_card_offer_status, card_names, card_image, place_offer, search_useroffers, NewestOffersView, ExpiredOrInactiveOffersView
+from .views import CardListView, CardOfferCreateView, search_offers, offer_details, offer_sold, update_card_offer_status, card_names, card_image, place_offer, search_useroffers, NewestOffersView, ExpiredOrInactiveOffersView, DeliveryDataView
 
 urlpatterns = [
     path('cards/', CardListView.as_view(), name='card-list'),
@@ -14,4 +14,5 @@ urlpatterns = [
     path('newest-offers/', NewestOffersView.as_view(), name='newest-offers'),
     path('expired-offers/', ExpiredOrInactiveOffersView.as_view(), name='expired-offers'),
     path('offer-sold/<int:offer_id>/', offer_sold, name='offer_sold'),
+    path('delivery-data/<int:offer_id>/', DeliveryDataView.as_view(), name='delivery_data'),
 ] 

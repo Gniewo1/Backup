@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Card, CardOffer, CardPurchase, UserOffer
+from .models import Card, CardOffer, CardPurchase, UserOffer, ShippingData
 
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,3 +33,22 @@ class UserOfferSerializer(serializers.ModelSerializer):
         model = UserOffer
         fields = ['id', 'card_name', 'offer_price', 'created_at']
         
+
+class ShippingDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShippingData
+        fields = [
+            "name",
+            "surname",
+            "card_offer",
+            "city",
+            "zip_code",
+            "street",
+            "house_number",
+            "apartment_number",
+            "delivery_completed",
+        ]
+        extra_kwargs = {
+            "card_offer": {"read_only": True},  # Prevent card_offer from being set manually
+            "delivery_completed": {"read_only": True},  # Prevent modification upon creation
+        }
