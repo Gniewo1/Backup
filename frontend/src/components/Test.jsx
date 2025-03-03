@@ -26,6 +26,7 @@ const Test = () => {
     useEffect(() => {
         axios.get(`http://localhost:8000/cards/offer-sold/${offerId}/`)
             .then(response => {
+                console.log(response.data);
                 setOffer(response.data);
             })
             .catch(error => {
@@ -106,7 +107,8 @@ const Test = () => {
 
                         {/* Shipping Info Form */}
                         <div className="shipping-info mt-4">
-                            <h3>Wymagane dane do wysyłki</h3>
+                        <h3>Wymagane dane do wysyłki</h3>
+                        {offer.shipping_exists ? (<h2>Dane wysyłki zostały już wysłane</h2>) : (
                             <form onSubmit={handleSubmitShipping}>
                                 <div>
                                     <label htmlFor="shipping_name">Imię</label>
@@ -187,6 +189,7 @@ const Test = () => {
                                 </div>
                                 <button type="submit" className="offer-button">Zatwierdź dane do wysyłki</button>
                             </form>
+                             )}
                         </div>
                     </div>
                 </div>

@@ -252,7 +252,10 @@ class ExpiredOrInactiveOffersView(APIView):
     
 def offer_sold(request, offer_id):
     try:
-        offer = CardOffer.objects.get(id=offer_id)  # Get the offer by ID, and ensure it's active
+        offer = CardOffer.objects.get(id=offer_id)  # Get the offer by ID
+        # Check if ShippingData exists for this offer
+        shipping_exists = ShippingData.objects.filter(card_offer=offer).exists()
+
     except CardOffer.DoesNotExist:
         raise Http404("Offer not found")
 
@@ -269,6 +272,7 @@ def offer_sold(request, offer_id):
         'auction_end_date': offer.auction_end_date,
         'is_active': offer.is_active,
         'bank_number':offer.bank_account_number,
+        'shipping_exists': shipping_exists
     }
 
     return JsonResponse(data)
