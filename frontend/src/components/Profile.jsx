@@ -40,11 +40,18 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      <div className="flex gap-4 mb-4">
-        <button>Aktywne oferty</button>
-        <button>Zakończone oferty</button>
-        <button>Historia</button>
+      <div className="flex mb-4">
+        <button style={{ backgroundColor: "#555", color: "white", padding: "8px 16px", borderRadius: "4px", marginRight: "16px" }}>
+          Aktywne oferty
+        </button>
+        <button style={{ backgroundColor: "#555", color: "white", padding: "8px 16px", borderRadius: "4px", marginRight: "16px" }}>
+          Zakończone oferty
+        </button>
+        <button style={{ backgroundColor: "#555", color: "white", padding: "8px 16px", borderRadius: "4px" }}>
+          Historia
+        </button>
       </div>
+
       <div className="container mx-auto p-6">
         <h2 className="text-xl font-bold mb-4">Wygrane aukcje</h2>
         <div className="offers-container">
