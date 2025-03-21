@@ -37,5 +37,5 @@ class TestSerializer(serializers.ModelSerializer):
 class VerifyingUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser  # Use your custom user model
-        fields = ['verified']
+        fields = ['is_verified']
 

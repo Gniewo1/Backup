@@ -47,8 +47,11 @@ const Profile = () => {
         <button style={{ backgroundColor: "#555", color: "white", padding: "8px 16px", borderRadius: "4px", marginRight: "16px" }}>
           Zakończone oferty
         </button>
-        <button style={{ backgroundColor: "#555", color: "white", padding: "8px 16px", borderRadius: "4px" }}>
+        <button style={{ backgroundColor: "#555", color: "white", padding: "8px 16px", borderRadius: "4px", marginRight: "16px" }}>
           Historia
+        </button>
+        <button onClick={() => navigate("/sell-card")} style={{ backgroundColor: "#555", color: "white", padding: "8px 16px", borderRadius: "4px" }}>
+          Sprzedaj kartę
         </button>
       </div>
 

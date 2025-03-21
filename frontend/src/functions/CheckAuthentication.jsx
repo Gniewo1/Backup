@@ -25,3 +25,20 @@ export const CheckAuthentication = async () => {
   
   return false; // No token found
 };
+
+export const CheckVerification = async () => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    try {
+      const response = await axios.get("http://localhost:8000/api/user-info/", {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      return response.data; // Return user data if needed
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  }
+};

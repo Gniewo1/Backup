@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Navbar from './Navbar';
 
 const Verification = () => {
   const [code, setCode] = useState('');
@@ -48,17 +49,20 @@ const Verification = () => {
   };
 
   return (
+    <>
+      <Navbar />
     <div>
-      <h2>Enter Verification Code</h2>
+      <h2>Podaj kod weryfikacyjny</h2>
       <input
         type="text"
         value={code}
         onChange={(e) => setCode(e.target.value)}
-        placeholder="Verification Code"
+        placeholder="Kod weryfikacyjny"
       />
-      <button onClick={handleVerify} disabled={!userId}>Verify</button>
+      <button onClick={handleVerify} disabled={!userId}>Weryfikuj</button>
       {message && <p>{message}</p>}
     </div>
+    </>
   );
 };
 

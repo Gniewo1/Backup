@@ -1,7 +1,7 @@
 import React from 'react';
 import {  useNavigate, Link } from 'react-router-dom';
 import '../styles/Navbar.css';
-import { CheckAuthentication } from '../functions/CheckAuthentication';
+import { CheckAuthentication, CheckVerification } from '../functions/CheckAuthentication';
 import { LogOut } from '../functions/LogOut';
 import { useState, useEffect } from 'react';
 import axios from "axios";
@@ -16,6 +16,7 @@ const Navbar = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const navigate = useNavigate();
   const currentPath = window.location.pathname; 
   const [searchQuery, setSearchQuery] = useState('');
@@ -80,7 +81,14 @@ const Navbar = () => {
       setIsAuthenticated(authenticated);
     };
 
+    const verification = async () => {
+      const verify = await CheckVerification();
+      // console.log(verify.is_verified);
+      setIsVerified(verify.is_verified);
+    }
+
     verifyAuthentication();
+    verification();
   }, []);
 
 
@@ -167,10 +175,18 @@ const Navbar = () => {
 
         {isAuthenticated ? (
           <>
+          {isVerified ? (
             <li>
               <Link to="/profile">Profil</Link>
             </li>
-              <li> 
+          ):(
+            <li>
+              <Link to="/verification">Profil</Link>
+            </li>
+          )
+          }
+              <li>
+          
               <button className="btn" onClick={handleLogout}>Wyloguj</button>
             </li> 
           </>
