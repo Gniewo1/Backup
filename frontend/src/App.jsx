@@ -10,7 +10,7 @@ import CardPurchaseForm from './components/BuyCard'
 import SearchResults from './components/SearchResults'
 import OfferDetails from './components/OfferDetails';
 import Verification from './components/Verification';
-import Test from './components/Test';
+import Shipment from './components/Shipment';
 import {Routes, Route, useLocation, Navigate} from 'react-router-dom'
 import axios from 'axios'
 
@@ -62,7 +62,7 @@ function App() {
      <Route path="/search" element={<SearchResults />} />
      <Route path="/buy-card/:offerId" element={<CardPurchaseForm />} />
      <Route path="/offers/:offerId" element={<OfferDetails />} />
-     <Route path="/sold/:offerId" element={<Test />} />
+     <Route path="/sold/:offerId" element={<Shipment />} />
      <Route path="/verification" element={<Verification />} />
     </Routes>
     </>

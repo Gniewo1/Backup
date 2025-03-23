@@ -31,13 +31,13 @@ class CardOfferCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-#fetch all card names 
+# fetch all card names 
 def card_names(request):
     cards = Card.objects.all().values('id', 'name')  # Queryset with only `id` and `name`
     card_list = list(cards)  # Convert queryset to list
     return JsonResponse(card_list, safe=False)
 
-#fetch current card image
+# fetch current card image
 def card_image(request, card_id):
     card = Card.objects.filter(id=card_id).first()
     if card:
@@ -177,11 +177,9 @@ def update_card_offer_status(request, pk):
     except CardOffer.DoesNotExist:
         return Response({'error': 'Card offer not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # Update the `is_active` field based on the request data
     card_offer.is_active = request.data.get('is_active', card_offer.is_active)
     card_offer.save()
     
-    # Serialize and return the updated card offer
     serializer = CardOfferSerializer(card_offer)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -193,8 +191,8 @@ class NewestOffersView(APIView):
         newest_offers = CardOffer.objects.filter(is_active=True, auction_end_date__gte= time).order_by('-created_at')[:10]
         response_data = list(newest_offers.values(
             'id',
-            'card__name',  # Access related field via double underscore
-            'seller__username',  # Access related field
+            'card__name',  
+            'seller__username',  
             'offer_type',
             'buy_now_price',
             'auction_current_price',
@@ -203,22 +201,6 @@ class NewestOffersView(APIView):
         ))
         return JsonResponse(response_data, safe=False)
     
-# # class WinOffers
-# def win_offers(user):
-#     # Subquery to get the highest offer for each expired or inactive CardOffer
-#     highest_offers = UserOffer.objects.filter(
-#         card_offer=OuterRef('pk')
-#     ).order_by('-offer_price').values('offer_price')[:1]
-
-#     # Get all expired or inactive offers where the user has the highest bid
-#     user_winning_offers = UserOffer.objects.filter(
-#         buyer=user,
-#         card_offer__is_active=False
-#     ).annotate(
-#         max_price=Subquery(highest_offers)
-#     ).filter(offer_price=F('max_price'))
-
-#     return user_winning_offers
 
 class ExpiredOrInactiveOffersView(APIView):
     permission_classes = [IsAuthenticated]
@@ -252,8 +234,8 @@ class ExpiredOrInactiveOffersView(APIView):
     
 def offer_sold(request, offer_id):
     try:
-        offer = CardOffer.objects.get(id=offer_id)  # Get the offer by ID
-        # Check if ShippingData exists for this offer
+        offer = CardOffer.objects.get(id=offer_id)  
+
         shipping_exists = ShippingData.objects.filter(card_offer=offer).exists()
 
     except CardOffer.DoesNotExist:
@@ -264,7 +246,7 @@ def offer_sold(request, offer_id):
         'id': offer.id,
         'user': offer.seller.username,
         'card_name': offer.card.name,
-        'card_image': offer.front_image.url if offer.front_image else None,  # Assuming 'image' is a File/ImageField
+        'card_image': offer.front_image.url if offer.front_image else None,  
         'card_image_back': offer.back_image.url if offer.back_image else None,
         'auction_price': offer.auction_current_price,
         'buy_now_price': offer.buy_now_price,
@@ -279,7 +261,7 @@ def offer_sold(request, offer_id):
 
 
 class DeliveryDataView(APIView):
-    permission_classes = [IsAuthenticated]  # Ensure only authenticated users can post
+    permission_classes = [IsAuthenticated] 
 
     def post(self, request, offer_id):
         try:
@@ -291,9 +273,9 @@ class DeliveryDataView(APIView):
 
         serializer = ShippingDataSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(card_offer=offer)  # Associate shipping data with the offer
+            serializer.save(card_offer=offer)  
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-        print("Received Data:", request.data)  # Debugging
-        
+        print("Received Data:", request.data)  
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

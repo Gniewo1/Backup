@@ -6,7 +6,7 @@ import '../styles/SearchResults.css';
 import '../styles/OfferDetails.css';
 import { CheckAuthentication } from '../functions/CheckAuthentication';
 
-const Test = () => {
+const Shipment = () => {
     const { offerId } = useParams();
     const [offer, setOffer] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -198,4 +198,4 @@ const Test = () => {
     );
 };
 
-export default Test;
+export default Shipment;
