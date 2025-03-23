@@ -11,6 +11,7 @@ import SearchResults from './components/SearchResults'
 import OfferDetails from './components/OfferDetails';
 import Verification from './components/Verification';
 import Shipment from './components/Shipment';
+import Test from './components/Test';
 import {Routes, Route, useLocation, Navigate} from 'react-router-dom'
 import axios from 'axios'
 
@@ -64,6 +65,7 @@ function App() {
      <Route path="/offers/:offerId" element={<OfferDetails />} />
      <Route path="/sold/:offerId" element={<Shipment />} />
      <Route path="/verification" element={<Verification />} />
+     <Route path="/test" element={<Test />} />
     </Routes>
     </>
   )

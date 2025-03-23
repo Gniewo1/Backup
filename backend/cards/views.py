@@ -279,3 +279,32 @@ class DeliveryDataView(APIView):
         print("Received Data:", request.data)  
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def user_inactive_offers(request):
+    user = request.user
+    expired_offers = CardOffer.objects.filter(
+        seller=user
+    ).filter(
+        is_active=False
+    ) | CardOffer.objects.filter(
+        seller=user,
+        auction_end_date__lt=now()
+    )
+
+    offers_data = [
+        {
+            "id": offer.id,
+            "card_name": offer.card.name,
+            # "offer_type": offer.offer_type,
+            # "buy_now_price": float(offer.buy_now_price) if offer.buy_now_price else None,
+            "auction_current_price": float(offer.auction_current_price) if offer.auction_current_price else None,
+            # "auction_end_date": offer.auction_end_date.strftime("%Y-%m-%d %H:%M:%S") if offer.auction_end_date else None,
+            # "created_at": offer.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        for offer in expired_offers
+    ]
+
+    return JsonResponse({"offers": offers_data})
