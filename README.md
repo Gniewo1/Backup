@@ -1,7 +1,9 @@
 żeby aktywować virtual envirment:
 backend:
 Set-ExecutionPolicy Unrestricted -Scope Process   <-- bo windows inaczej nie chce
+
 venv/scripts/activate
+
 python manage.py runserver
 
 
@@ -11,6 +13,9 @@ npm run dev
 
 
 superuser:
+
 login : Admin
+
 email : email@email.com
+
 hasło : 1234
