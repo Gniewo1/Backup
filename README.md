@@ -11,6 +11,6 @@ npm run dev
 
 
 superuser:
-  login : Admin
-	email : email@email.com
-	hasło : 1234
+login : Admin
+email : email@email.com
+hasło : 1234
