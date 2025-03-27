@@ -8,6 +8,8 @@ venv/scripts/activate
 
 python manage.py runserver
 
+Admin adress: http://127.0.0.1:8000/8zIePhw7tCSwlGZ/
+
 
 frontend:
 
