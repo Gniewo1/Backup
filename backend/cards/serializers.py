@@ -7,12 +7,54 @@ class CardSerializer(serializers.ModelSerializer):
         fields = [ 'id', 'name', 'image']
 
 
+# class CardOfferSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CardOffer
+#         fields = '__all__'
+#         read_only_fields = ['seller', 'created_at', 'is_active']
 class CardOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardOffer
         fields = '__all__'
         read_only_fields = ['seller', 'created_at', 'is_active']
 
+    def validate(self, data):
+        offer_type = data.get('offer_type')
+
+        # Dla 'buy_now' wymagamy buy_now_price
+        if offer_type == 'buy_now' and not data.get('buy_now_price'):
+            raise serializers.ValidationError({
+                'buy_now_price': 'To pole jest wymagane dla oferty "Kup Teraz".'
+            })
+
+        # Dla 'auction' wymagamy auction_start_price i auction_current_price
+        if offer_type == 'auction':
+            if not data.get('auction_start_price'):
+                raise serializers.ValidationError({
+                    'auction_start_price': 'To pole jest wymagane dla aukcji.'
+                })
+            if not data.get('auction_current_price'):
+                raise serializers.ValidationError({
+                    'auction_current_price': 'To pole jest wymagane dla aukcji.'
+                })
+
+        # Dla obu trybów wymagamy wszystkich cen
+        if offer_type == 'buy_now_and_auction':
+            if not data.get('buy_now_price'):
+                raise serializers.ValidationError({
+                    'buy_now_price': 'To pole jest wymagane dla trybu "Kup Teraz i Aukcja".'
+                })
+            if not data.get('auction_start_price'):
+                raise serializers.ValidationError({
+                    'auction_start_price': 'To pole jest wymagane dla trybu "Kup Teraz i Aukcja".'
+                })
+            if not data.get('auction_current_price'):
+                raise serializers.ValidationError({
+                    'auction_current_price': 'To pole jest wymagane dla trybu "Kup Teraz i Aukcja".'
+                })
+
+        return data
+    
 class CardWinOfferSerializer(serializers.ModelSerializer):
     card = CardSerializer(read_only=True)
     seller_username = serializers.CharField(source='seller.username', read_only=True)

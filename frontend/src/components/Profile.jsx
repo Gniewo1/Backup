@@ -9,6 +9,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [user, setUser] = useState([]);
 
   const handleViewOffer = (offerId) => {
     // Navigate to the offer's specific page
@@ -30,8 +31,25 @@ const Profile = () => {
         setLoading(false);
       }
     };
+    
+    const fetchMail = async () => {
+      try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get("http://localhost:8000/api/user-info/", {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      setUser(response.data); // Return user data if needed
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+    }
+
+
 
     fetchWinningOffers();
+    fetchMail();
   }, []);
 
   if (loading) return <p>Loading...</p>;
@@ -40,7 +58,7 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      <div className="flex mb-4">
+      {/* <div className="flex mb-4">
         <button style={{ backgroundColor: "#555", color: "white", padding: "8px 16px", borderRadius: "4px", marginRight: "16px" }}>
           Aktywne oferty
         </button>
@@ -53,7 +71,7 @@ const Profile = () => {
         <button onClick={() => navigate("/sell-card")} style={{ backgroundColor: "#555", color: "white", padding: "8px 16px", borderRadius: "4px" }}>
           Sprzedaj kartę
         </button>
-      </div>
+      </div> */}
 
       <div className="container mx-auto p-6">
         <h2 className="text-xl font-bold mb-4">Wygrane aukcje</h2>
@@ -74,6 +92,7 @@ const Profile = () => {
                 <h3 className="text-lg font-semibold">{offer.card.name}</h3>
                 <p className="text-gray-600">Cena końcowa: {offer.auction_current_price} PLN</p>
                 <p className="text-gray-600">Sprzedał: {offer.seller_username}</p>
+                <p className="text-gray-600">E-mail kontaktowy: {user.email}</p>
                 <p className="text-gray-600">Konto do przelewu: {offer.bank_account_number}</p>
                 
 

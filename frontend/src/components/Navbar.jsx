@@ -82,10 +82,19 @@ const Navbar = () => {
     };
 
     const verification = async () => {
-      const verify = await CheckVerification();
-      // console.log(verify.is_verified);
-      setIsVerified(verify.is_verified);
-    }
+      try {
+        const verify = await CheckVerification();
+        if (verify && typeof verify.is_verified !== 'undefined') {
+          setIsVerified(verify.is_verified);
+        } else {
+          console.warn("Unexpected response from CheckVerification:", verify);
+          setIsVerified(false); // or handle it differently
+        }
+      } catch (error) {
+        console.error("Verification check failed:", error);
+        setIsVerified(false);
+      }
+    };
 
     verifyAuthentication();
     verification();
